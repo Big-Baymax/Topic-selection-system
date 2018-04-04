@@ -1,14 +1,14 @@
 # Topic-selection-system
 学生选题系统
 
-# 项目环境
+## 项目环境
 1. 运行环境   
     - appache + mysql + php   
 2. 入口文件   
    
 3. 使用框架 
     - Laravel 
-# 接口使用说明
+##接口使用说明
 ## 项目配置  
 - 设置配置信息:   
 ```
@@ -71,7 +71,7 @@ exportToExcel(filenameAndPath, startTime, endTime); // 导出excel表格
 exportToExcelOfAll(filenameAndPath); // 导出excel表格  全部内容
 ```
      
-## 房间与教室相关
+### 房间与教室相关
 - 获取配置   
     所有的安排: `getAll('table'); // table = housing | classroom`
 - 设置安排
@@ -87,9 +87,9 @@ exportToExcelOfAll(filenameAndPath); // 导出excel表格  全部内容
     
 
 
-# 数据库配置
+## 数据库配置
 
-## plan_housing 住宿安排
+### plan_housing 住宿安排
 
 |     名称    |   类型   |     描述    |
 |:----------:|:-------:|:-----------:|
@@ -101,7 +101,7 @@ exportToExcelOfAll(filenameAndPath); // 导出excel表格  全部内容
 | start_time | TEXT    | 入住开始时间   |
 | end_time   | TEXT    | 入住结束时间   |
 
-## plan_classroom  教室安排
+### plan_classroom  教室安排
 
 |     名称    |   类型   |     描述    |
 |:----------:|:-------:|:-----------:|
@@ -112,7 +112,7 @@ exportToExcelOfAll(filenameAndPath); // 导出excel表格  全部内容
 | end_time   | TEXT    | 时间         |
 | time_flag  | INTEGER | 上午/下午/晚上 |
 
-## plan_meeting 讨论室安排
+### plan_meeting 讨论室安排
 
 |     名称    |   类型   |     描述    |
 |:----------:|:-------:|:-----------:|
