@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <title>_TITLE_{block name="title"} - 标题{/block}</title>
+    <meta name="keywords" content="_KEY_">
+    <meta name="description" content="_DES_">
+    <link rel="shortcut icon" href="_IMG_/favicon.ico">
+    <link href="_CSS_/bootstrap.min.css" rel="stylesheet">
+    <link href="_CSS_/font-awesome.min.css" rel="stylesheet">
+    <link href="_CSS_/animate.min.css" rel="stylesheet">
+    <link href="_CSS_/style.min.css" rel="stylesheet">
+    <link href="_CSS_/bgmystyle.css" rel="stylesheet">
+    <script src="_JS_/jquery-1.11.3.min.js"></script>
+    <script src="_JS_/bootstrap.min.js"></script>
+    <script src="_JS_/plugins/validate/jquery.validate.min.js"></script>
+    <script src="_JS_/plugins/validate/messages_zh.min.js"></script>
+    <script src="_JS_/content.min.js?v=1.0.0"></script>
+    <script src="_JS_/plugins/layer/layer.js"></script>
+    <script src="_JS_/bgmy.js"></script>
+
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html" />
+    <![endif]-->
+    {block name="css"}
+
+    {/block}
+</head>
+
+{block name="body"}
+<body>
+BODY
+</body>
+{/block}
+{block name="model"}
+
+{/block}
+{block name="linkjs"}
+
+{/block}
+<script>
+    //验证插件初始化
+    $.validator.setDefaults({
+        highlight: function (e) {
+            $(e).closest(".form-group").removeClass("has-success").addClass("has-error")
+        },
+        success: function (e) {
+            e.closest(".form-group").removeClass("has-error").addClass("has-success")
+        },
+        errorElement: "span",
+        errorPlacement: function (e, r) {
+            e.appendTo(r.is(":radio") || r.is(":checkbox") ? r.parent().parent().parent() : r.parent())
+        },
+        errorClass: "help-block m-b-none",
+        validClass: "help-block m-b-none",
+    })
+</script>
+{block name="js"}
+
+{/block}
+</html>
