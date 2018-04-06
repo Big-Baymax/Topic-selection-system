@@ -9,6 +9,18 @@
 3. 使用框架 
     - Laravel 
 ## 接口使用说明
+   ### 信息管理分页参数说明
+   - 请求
+   pageNumber：第几页
+   pageSize：每页几条记录；
+   sortName：根据这个字段排序；
+   sortOrder：按照正序或者倒序；
+   searchText：搜索关键字；
+   
+   - 返回
+   total: 总共有几条数据
+   data: 数据记录的详细参数
+   
 ## 项目配置  
 - 设置配置信息:   
 ```
