@@ -26,10 +26,18 @@ class checkAdminLogin
                     'code' => -1
                 ]);
             } else {
-                return response("<script>window.location.href='login'</script>");
+                return response("<script>window.location.href='login';   </script>");
             }
         }
-        $request->attributes->add(['user' => $res]);
+
+        $request->attributes->add(['user' => $res['user']]);
+        \View::composer('admin.index', function($view) use ($res){
+            $view->with([
+                'user' => $res['user'],
+                'identity' => config('common.identity')[$res['identity']]
+            ]);
+        });
+
 
         return $next($request);
     }
@@ -37,7 +45,7 @@ class checkAdminLogin
     public function checkLogin($request)
     {
         $admin_user = $request->session()->get(config('admin_remember_session'));
-        if (!isset($admin_user['admin_user']) && $admin_user['admin_user']) {
+        if (!isset($admin_user['admin_user']) || !$admin_user['admin_user']) {
             return false;
         }
         $admin_user = $admin_user['admin_user'];
@@ -67,6 +75,9 @@ class checkAdminLogin
             return false;
         }
 
-        return $user;
+        return [
+            'identity' => $identity,
+            'user' => $user
+        ];
     }
 }

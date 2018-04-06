@@ -16,6 +16,7 @@ Route::get('/login', 'LoginController@index');
 Route::post('/login', 'LoginController@login');
 Route::group(['middleware' => 'checkAdminLogin'], function () {
     Route::get('/home', 'WelcomeController@index');
+    Route::get('/logout', 'LoginController@logout');
 });
 
 Route::get('/setting/time', function () {

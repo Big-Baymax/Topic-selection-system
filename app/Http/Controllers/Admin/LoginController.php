@@ -12,12 +12,16 @@ class LoginController extends Controller
 {
     public function index()
     {
+        if (\request()->session()->get(config('common.admin_remember_session'))) {
+            $this->middleware('checkAdminLogin');
+            return redirect('/admin/home');
+        }
         return view('admin/check/login');
     }
 
     public function login(Request $request)
     {
-        $this->validate($request, [
+        $validator = $this->getValidationFactory()->make($request->input(), [
             'login_name' => 'required',
             'password' => 'required',
             'identity' => 'required|in:' . implode(',', array_keys(config('common.identity')))
@@ -27,6 +31,9 @@ class LoginController extends Controller
             'identity.required' => '请选择登录身份～～',
             'identity.in' => '身份错误～～'
         ]);
+        if ($validator->fails()) {
+            return formatResponse($validator->errors()->first());
+        }
         $login_name = $request->post('login_name');
         $identity = $request->post('identity');
         switch ($identity) {
@@ -60,5 +67,12 @@ class LoginController extends Controller
         return formatResponse('登录成功～～', [
             'redirect_url' => '/admin/home'
         ], 1);
+    }
+
+    public function logout()
+    {
+        request()->session()->forget(config('common.admin_remember_session'));
+
+        return redirect('admin/login');
     }
 }
