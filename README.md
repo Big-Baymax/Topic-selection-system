@@ -6,7 +6,7 @@
     - appache + mysql + php   
 2. 入口文件   
    
-3. 使用框架 
+3. 使用框架（Laravel 5.5）
     - PHP >= 7.0.0
     - PHP OpenSSL 扩展
     - PHP PDO 扩展
