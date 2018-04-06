@@ -3,9 +3,9 @@
 
 ## 项目环境
 1. 运行环境   
-    - appache + mysql + php   
+     - appache + mysql + php   
 2. 入口文件   
-   
+    - public/index
 3. 使用框架（Laravel 5.5）
     - PHP >= 7.0.0
     - PHP OpenSSL 扩展
