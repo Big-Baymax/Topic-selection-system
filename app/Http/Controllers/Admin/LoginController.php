@@ -12,18 +12,18 @@ class LoginController extends Controller
 {
     public function index()
     {
-        return view('admin/login/index');
+        return view('admin/check/login');
     }
 
     public function login(Request $request)
     {
         $this->validate($request, [
             'login_name' => 'required',
-            'login_pwd' => 'required',
+            'password' => 'required',
             'identity' => 'required|in:' . implode(',', array_keys(config('common.identity')))
         ], [
             'login_name.required' => '请输入登录名～～',
-            'login_pwd.required' => '请输入密码～～',
+            'password.required' => '请输入密码～～',
             'identity.required' => '请选择登录身份～～',
             'identity.in' => '身份错误～～'
         ]);
@@ -49,7 +49,7 @@ class LoginController extends Controller
         if (!$tmp_user) {
             return formatResponse('用户名密码不匹配～～');
         }
-        $login_pwd = $request->post('login_pwd');
+        $login_pwd = $request->post('password');
         $tmp_md5_password = md5($login_pwd . md5($tmp_user->salt));
         if ($tmp_md5_password !== $tmp_user->password) {
             return formatResponse('用户名密码不匹配～～');

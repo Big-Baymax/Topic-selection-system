@@ -37,9 +37,10 @@ class checkAdminLogin
     public function checkLogin($request)
     {
         $admin_user = $request->session()->get(config('admin_remember_session'));
-        if (!$admin_user) {
+        if (!isset($admin_user['admin_user']) && $admin_user['admin_user']) {
             return false;
         }
+        $admin_user = $admin_user['admin_user'];
         $id_token_arr = explode('#', $admin_user);
         if (count($id_token_arr) < 3) {
             return false;

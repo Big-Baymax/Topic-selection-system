@@ -11,4 +11,21 @@
 |
 */
 
+//Route::get('/login', 'LoginController@index');
 Route::get('/login', 'LoginController@index');
+Route::post('/login', 'LoginController@login');
+Route::group(['middleware' => 'checkAdminLogin'], function () {
+    Route::get('/home', 'WelcomeController@index');
+});
+
+Route::get('/setting/time', function () {
+    return view('admin/setting/time');
+});
+
+Route::get('/index_con', function () {
+    return view('admin/index_con');
+});
+
+Route::get('/admin_manage', function () {
+    return view('admin/adminmanage/index');
+});

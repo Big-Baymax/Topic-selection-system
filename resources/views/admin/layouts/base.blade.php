@@ -7,6 +7,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
+    <meta name="csrf-token" content="{{csrf_token()}}">
     <meta http-equiv="Cache-Control" content="no-siteapp" />
     <title>毕业设计选题管理系统- @yield('title')</title>
     <meta name="keywords" content="_KEY_">
