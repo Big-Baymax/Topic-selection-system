@@ -1,0 +1,6 @@
+/public/hot
+/storage/*.key
+/.idea
+/.vscode
+/.vagrant
+.env
