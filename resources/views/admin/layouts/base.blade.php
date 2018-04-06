@@ -28,6 +28,7 @@
     <!--[if lt IE 9]>
     <meta http-equiv="refresh" content="0;ie.html" />
     <![endif]-->
+    @yield('linkcss')
     @yield('css')
 </head>
 
@@ -48,7 +49,7 @@
         },
         errorElement: "span",
         errorPlacement: function (e, r) {
-            e.appendTo(r.is(":radio") || r.is(":checkbox") ? r.parent().parent().parent() : r.parent())
+            e.appendTo(r.is(":radio") || r.is(":checkbox") ? r.parent().parent(): r.parent())
         },
         errorClass: "help-block m-b-none",
         validClass: "help-block m-b-none",
