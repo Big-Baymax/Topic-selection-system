@@ -18,3 +18,11 @@ Route::get('/', function () {
 Route::get('/admin/index', function () {
     return view('admin/index');
 });
+
+Route::get('/admin/index_con', function () {
+    return view('admin/index_con');
+});
+
+Route::get('/admin/admin_manage', function () {
+    return view('admin/adminmanage/index');
+});
