@@ -7,9 +7,14 @@
 2. 入口文件   
    
 3. 使用框架 
-    - Laravel 
+    - PHP >= 7.0.0
+    - PHP OpenSSL 扩展
+    - PHP PDO 扩展
+    - PHP Mbstring 扩展
+    - PHP Tokenizer 扩展
+    - PHP XML 扩展
 ## 接口使用说明
-   #### + 信息管理分页参数说明
+   #### + 登录接口参数说明
    > 请求
    - name：用户名
    - pwd：密码
