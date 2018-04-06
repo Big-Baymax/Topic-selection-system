@@ -19,6 +19,10 @@ Route::get('/admin/login', function () {
     return view('admin/check/login');
 });
 
+Route::get('/admin/setting/time', function () {
+    return view('admin/setting/time');
+});
+
 Route::get('/admin/index', function () {
     return view('admin/index');
 });
