@@ -4,7 +4,7 @@
 ## 项目环境
 1. 运行环境   
      - appache + mysql + php   
-2. 入口文件   
+2. 入口文件
     - public/index
 3. 使用框架（Laravel 5.5）
     - PHP >= 7.0.0
@@ -13,28 +13,31 @@
     - PHP Mbstring 扩展
     - PHP Tokenizer 扩展
     - PHP XML 扩展
+
+## 项目编译
+- composer install 安装composer依赖
+- php artisan key:generate 项目第一次运行
+- php artisan migrate 数据迁移
+- php artisan db:seed 生成数据
 ## 接口使用说明
-   #### + 登录接口参数说明
-   > 请求（post）
-   - login_name：用户名
-   - pwd：密码
-   - type：什么用户（1 管理员 2 老师 3 学生）
-   
-   > 返回
-   - status: 0 不通过或者发生错误,1 通过或者没问题
-   - msg: 返回提示的信息（如：用户名错误！）
-   #### + 信息管理分页参数说明
-   > 请求（post）
-   - pageNumber：第几页
-   - pageSize：每页几条记录；
-   - sortName：根据这个字段排序；
-   - sortOrder：按照正序或者倒序；
-   - searchText：搜索关键字；
-   
-   > 返回
-   - total: 总共有几条数据
-   - data: 数据记录的详细参数
-   
+### 登录接口
+```
+    地址:http://~/admin/login
+    参数:{
+            login_name:登录名,
+            login_pwd:登录密码,
+            identity:身份（1:管理员 2:老师 3:学生）
+    }
+    服务端返回json:{
+            code:1(1:success 0:failed),
+            msg:登录成功,
+            data:{
+                    redirect_url:xxx
+            }
+    }
+```
+
+## 分割线
 ## 项目配置  
 - 设置配置信息:   
 ```
@@ -43,7 +46,7 @@ setConfig({
     double: num, // 标间数量
     classroom: '多功能厅,第一教室,第二教室,第四教室,第五教室,第六教室,第七教室', //教室
     meeting: '第4讨论室,第5讨论室,第6讨论室,第7讨论室,第8讨论室,第9讨论室,第10讨论室,第11讨论室,第12讨论室,第13讨论室,第14讨论室,第15讨论室,第16讨论室' //讨论室
-}); 
+});
 ``` 
 - 获取配置内容  
 getConfig();
