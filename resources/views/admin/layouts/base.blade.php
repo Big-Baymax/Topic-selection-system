@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
     <meta http-equiv="Cache-Control" content="no-siteapp" />
-    <title>在线学生选题系统 - @yield('title')</title>
+    <title>毕业设计选题管理系统- @yield('title')</title>
     <meta name="keywords" content="_KEY_">
     <meta name="description" content="_DES_">
     <link rel="shortcut icon" href="/img/favicon.ico">
