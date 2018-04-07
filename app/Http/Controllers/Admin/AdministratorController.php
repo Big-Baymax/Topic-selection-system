@@ -85,7 +85,10 @@ class AdministratorController extends BaseController
     {
         $administrator = Administrator::find($id);
 
-        return view('admin/administrators/edit', compact('administrator'));
+        return [
+            'code' => 1,
+            'data' => $administrator
+        ];
     }
 
     public function update(Request $request, $id)

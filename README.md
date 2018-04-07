@@ -66,7 +66,7 @@
         password:密码
     }
 ```
-### 修改管理员(视图)
+### 修改管理员数据
 ```
     地址 (GET) http://~/admin/administrators/{id}/edit
 ```
