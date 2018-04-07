@@ -22,6 +22,14 @@ Route::group(['middleware' => 'checkAdminLogin'], function () {
     Route::resource('/administrators', 'AdministratorController');
     Route::match(['get', 'post'], '/administrators/reset-pwd/{id}', 'AdministratorController@resetPwd');
     Route::post('/administrators/ops', 'AdministratorController@ops');
+
+//    教师管理
+    Route::get('/teachers/index', 'TeacherController@list');
+    Route::resource('/teachers', 'TeacherController');
+    Route::post('/teachers/ops', 'TeacherController@ops');
+    Route::get('/students/index', 'StudentController@list');
+    Route::resource('/students', 'StudentController');
+    Route::post('/students/ops', 'StudentController@ops');
 });
 
 Route::get('/setting/time', function () {
