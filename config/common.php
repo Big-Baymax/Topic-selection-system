@@ -1,6 +1,6 @@
 <?php
 return [
-    'identity' => [
+    'identity_mapping' => [
         '1' => '管理员',
         '2' => '教师',
     ],

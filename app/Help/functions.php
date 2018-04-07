@@ -18,8 +18,3 @@ function makeSalt($length = 16)
 
     return $salt;
 }
-
-function test()
-{
-    return response(111);
-}

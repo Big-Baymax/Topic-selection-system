@@ -24,7 +24,7 @@ class LoginController extends Controller
         $validator = $this->getValidationFactory()->make($request->input(), [
             'login_name' => 'required',
             'password' => 'required',
-            'identity' => 'required|in:' . implode(',', array_keys(config('common.identity')))
+            'identity' => 'required|in:' . implode(',', array_keys(config('common.identity_mapping')))
         ], [
             'login_name.required' => '请输入登录名～～',
             'password.required' => '请输入密码～～',

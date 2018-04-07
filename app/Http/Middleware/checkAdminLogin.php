@@ -34,10 +34,9 @@ class checkAdminLogin
         \View::composer('admin.index', function($view) use ($res){
             $view->with([
                 'user' => $res['user'],
-                'identity' => config('common.identity')[$res['identity']]
+                'identity' => config('common.identity_mapping')[$res['identity']]
             ]);
         });
-
 
         return $next($request);
     }
@@ -65,9 +64,6 @@ class checkAdminLogin
                 break;
             case 2:
                 $user = Teacher::find($id);
-                break;
-            case 3:
-                $user = Student::find($id);
                 break;
         }
         $tmp_auth_token = md5($user->password . $user->salt);

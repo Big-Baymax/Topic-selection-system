@@ -4,9 +4,20 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Administrator;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class AdministratorController extends BaseController
 {
+    public function __construct()
+    {
+        $this->checkPolicy('admin');
+    }
+
+    public function list()
+    {
+        return view('admin/administrator/index');
+    }
+
     public function index(Request $request)
     {
         $input = $request->all();
@@ -17,7 +28,8 @@ class AdministratorController extends BaseController
         $searchText = array_get($input, 'searchText', '');
         $query = Administrator::query();
         if ($searchText) {
-            $query->where('name', $searchText);
+            $query->where('name', 'like', '%' . $searchText . '%')
+                ->orWhere('login_name', 'like', '%' . $searchText . '%');
         }
         if ($sortName) {
             $query->orderBy($sortName, $sortOrder);
