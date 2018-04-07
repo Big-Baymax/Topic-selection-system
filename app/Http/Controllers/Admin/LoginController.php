@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Administrator;
 use App\Models\Student;
 use App\Models\Teacher;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 class LoginController extends Controller
 {

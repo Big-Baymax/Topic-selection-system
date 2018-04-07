@@ -22,7 +22,7 @@
 ## 接口使用说明
 ### 登录接口
 ```
-    地址:http://~/admin/login
+    地址: (POST) http://~/admin/login
     参数:{
             login_name:登录名,
             login_pwd:登录密码,
@@ -36,7 +36,65 @@
             }
     }
 ```
-
+### 管理员列表
+```
+    地址: (GET) http://~/admin/administrators
+    参数:{
+            pageNumber:第几页,
+            pageSize:每页几条记录,
+            sortName:根据这个字段排序,
+            sortOrder:desc/asc,
+            searchText:搜索关键字
+    }
+    服务端返回json:{
+            code:1
+            data:{},
+            total:数据总数
+    }
+```
+### 添加管理员(视图)
+```
+    地址 (GET) http://~/admin/administratos/create
+```
+### 添加管理员(逻辑)
+```
+    地址 (POST) http://~/admin/administrators
+    参数:{
+            name:姓名,
+            mobile:手机,
+            login_name:登录名,
+            password:密码
+    }
+```
+### 修改管理员(视图)
+```
+    地址 (GET) http://~/admin/administrators/{id}/edit
+```
+### 修改管理员(逻辑)
+```
+    地址 (POST) http://~/admin/administrators/{id}
+    参数:{
+            name:姓名,
+            mobile:手机,
+            login_name:登录名,
+            _method:put(方法伪造,必传)
+    }
+```
+### 重置密码
+```
+    地址 (GET(视图)/POST(逻辑)) http://~/admin/administrators/reset-pwd/{id}
+    参数:{
+            password:密码
+    }
+```
+### 禁用/恢复管理员
+```
+    地址 (POST) http://~/admin/administrators/ops
+    参数:{
+            id:管理员id,
+            act:动作 recover(恢复)/remove(禁用)
+    }
+```
 ## 分割线
 ## 项目配置  
 - 设置配置信息:   

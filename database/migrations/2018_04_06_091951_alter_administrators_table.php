@@ -13,7 +13,7 @@ class AlterAdministratorsTable extends Migration
      */
     public function up()
     {
-        Schema::table('administrators', function (Blueprint $table) {
+        Schema::table('administrator', function (Blueprint $table) {
             $table->integer('status')->default(1)->comment('1有效 0无效')->change();
         });
     }
@@ -25,7 +25,7 @@ class AlterAdministratorsTable extends Migration
      */
     public function down()
     {
-        Schema::table('administrators', function (Blueprint $table) {
+        Schema::table('administrator', function (Blueprint $table) {
             $table->integer('status')->comment('1有效 0无效')->change();
         });
     }

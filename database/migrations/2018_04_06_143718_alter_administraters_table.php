@@ -13,7 +13,7 @@ class AlterAdministratersTable extends Migration
      */
     public function up()
     {
-        Schema::table('administrators', function (Blueprint $table) {
+        Schema::table('administrator', function (Blueprint $table) {
             $table->renameColumn('nickname', 'name');
         });
     }
@@ -25,7 +25,7 @@ class AlterAdministratersTable extends Migration
      */
     public function down()
     {
-        Schema::table('administrators', function (Blueprint $table) {
+        Schema::table('administrator', function (Blueprint $table) {
             $table->renameColumn('name', 'nickname');
         });
     }

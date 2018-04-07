@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class BaseController extends Controller
@@ -11,10 +10,7 @@ class BaseController extends Controller
     {
         $validator = $this->getValidationFactory()->make($input, $rules, $messages);
         if ($validator->fails()) {
-            return response([
-                'code' => 0,
-                'msg' => $validator->errors()->first()
-            ]);
+            return $validator->errors()->first();
         }
         return false;
     }

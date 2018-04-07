@@ -13,7 +13,7 @@ class AlterAdministratersStudentsTeachersWithUnique extends Migration
      */
     public function up()
     {
-        Schema::table('administrators', function (Blueprint $table) {
+        Schema::table('administrator', function (Blueprint $table) {
             $table->unique('login_name');
         });
         Schema::table('students', function (Blueprint $table) {
@@ -31,7 +31,7 @@ class AlterAdministratersStudentsTeachersWithUnique extends Migration
      */
     public function down()
     {
-        Schema::table('administrators', function (Blueprint $table) {
+        Schema::table('administrator', function (Blueprint $table) {
             $table->dropUnique('login_name');
         });
         Schema::table('students', function (Blueprint $table) {

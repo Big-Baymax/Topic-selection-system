@@ -17,6 +17,10 @@ Route::post('/login', 'LoginController@login');
 Route::group(['middleware' => 'checkAdminLogin'], function () {
     Route::get('/home', 'WelcomeController@index');
     Route::get('/logout', 'LoginController@logout');
+//    管理员管理
+    Route::resource('/administrators', 'AdministratorController');
+    Route::match(['get', 'post'], '/administrators/reset-pwd/{id}', 'AdministratorController@resetPwd');
+    Route::post('/administrators/ops', 'AdministratorController@ops');
 });
 
 Route::get('/setting/time', function () {
@@ -28,5 +32,5 @@ Route::get('/index_con', function () {
 });
 
 Route::get('/admin_manage', function () {
-    return view('admin/adminmanage/index');
+    return view('admin/administrator/index');
 });
