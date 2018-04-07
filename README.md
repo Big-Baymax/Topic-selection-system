@@ -24,32 +24,32 @@
 ```
     地址: (POST) http://~/admin/login
     参数:{
-            login_name:登录名,
-            login_pwd:登录密码,
-            identity:身份（1:管理员 2:老师 3:学生）
+        login_name:登录名,
+        login_pwd:登录密码,
+        identity:身份（1:管理员 2:老师 3:学生）
     }
     服务端返回json:{
-            code:1(1:success 0:failed),
-            msg:登录成功,
-            data:{
-                    redirect_url:xxx
-            }
+        code:1(1:success 0:failed),
+        msg:登录成功,
+        data:{
+                redirect_url:xxx
+        }
     }
 ```
 ### 管理员列表
 ```
     地址: (GET) http://~/admin/administrators
     参数:{
-            pageNumber:第几页,
-            pageSize:每页几条记录,
-            sortName:根据这个字段排序,
-            sortOrder:desc/asc,
-            searchText:搜索关键字
+        pageNumber:第几页,
+        pageSize:每页几条记录,
+        sortName:根据这个字段排序,
+        sortOrder:desc/asc,
+        searchText:搜索关键字
     }
     服务端返回json:{
-            code:1
-            data:{},
-            total:数据总数
+        code:1
+        data:{},
+        total:数据总数
     }
 ```
 ### 添加管理员(视图)
@@ -60,10 +60,10 @@
 ```
     地址 (POST) http://~/admin/administrators
     参数:{
-            name:姓名,
-            mobile:手机,
-            login_name:登录名,
-            password:密码
+        name:姓名,
+        mobile:手机,
+        login_name:登录名,
+        password:密码
     }
 ```
 ### 修改管理员(视图)
@@ -74,25 +74,25 @@
 ```
     地址 (POST) http://~/admin/administrators/{id}
     参数:{
-            name:姓名,
-            mobile:手机,
-            login_name:登录名,
-            _method:put(方法伪造,必传)
+        name:姓名,
+        mobile:手机,
+        login_name:登录名,
+        _method:put(方法伪造,必传)
     }
 ```
 ### 重置密码
 ```
     地址 (GET(视图)/POST(逻辑)) http://~/admin/administrators/reset-pwd/{id}
     参数:{
-            password:密码
+        password:密码
     }
 ```
 ### 禁用/恢复管理员
 ```
     地址 (POST) http://~/admin/administrators/ops
     参数:{
-            id:管理员id,
-            act:动作 recover(恢复)/remove(禁用)
+        id:管理员id,
+        act:动作 recover(恢复)/remove(禁用)
     }
 ```
 ## 分割线
