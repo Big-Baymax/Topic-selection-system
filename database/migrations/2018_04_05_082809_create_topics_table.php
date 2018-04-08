@@ -22,6 +22,7 @@ class CreateTopicsTable extends Migration
             $table->integer('student_id')->default(0)->comment('所属学生id');
             $table->tinyInteger('status')->comment('状态 1有效 0无效');
             $table->timestamps();
+            $table->unique('name');
         });
     }
 

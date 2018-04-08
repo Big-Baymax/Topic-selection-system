@@ -17,6 +17,7 @@ class CreateStudentTopicLogs extends Migration
             $table->increments('id');
             $table->integer('student_id')->comment('学生ID');
             $table->integer('topic_id')->comment('选题ID');
+            $table->integer('teacher_id')->comment('教师ID');
             $table->timestamp('create_at')->comment('创建时间');
         });
     }

@@ -22,6 +22,7 @@ class CreateTeachersTable extends Migration
             $table->string('salt', 16)->comment('加密盐');
             $table->tinyInteger('status')->default(1)->comment('状态 1有效 0无效');
             $table->timestamps();
+            $table->unique('teacherNo');
         });
     }
 

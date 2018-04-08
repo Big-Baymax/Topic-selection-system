@@ -19,6 +19,7 @@ class CreteTopicCategoriesTable extends Migration
             $table->tinyInteger('weight')->comment('权重');
             $table->tinyInteger('status')->comment('状态 1有效 0无效');
             $table->timestamps();
+            $table->unique('name');
         });
     }
 

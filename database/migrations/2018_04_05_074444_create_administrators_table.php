@@ -13,15 +13,16 @@ class CreateAdministratorsTable extends Migration
      */
     public function up()
     {
-        Schema::create('administrator', function (Blueprint $table) {
+        Schema::create('administrators', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('nickname', 30)->comment('用户名');
+            $table->string('name', 30)->comment('用户名');
             $table->string('mobile', 11)->comment('手机号');
             $table->string('login_name', 20)->comment('登录名');
-            $table->string('login_pwd', 32)->comment('登录密码');
-            $table->string('login_salt', 16)->comment('加密盐');
-            $table->tinyInteger('status')->comment('1 有效 0无效');
+            $table->string('password', 32)->comment('登录密码');
+            $table->string('salt', 16)->comment('加密盐');
+            $table->tinyInteger('status')->default(1)->comment('1 有效 0无效');
             $table->timestamps();
+            $table->unique('login_name');
         });
     }
 
