@@ -32,6 +32,13 @@ Route::group(['middleware' => 'checkAdminLogin'], function () {
     Route::post('/students/ops', 'StudentController@ops');
 });
 
+Route::get('test', function () {
+    return view('admin/test');
+});
+Route::get('/excel/import/logs', 'ImportErrorLogController@list');
+Route::post('/excel/import', 'ExcelController@import');
+Route::get('/excel/export', 'ExcelController@export');
+
 Route::get('/setting/time', function () {
     return view('admin/setting/time');
 });

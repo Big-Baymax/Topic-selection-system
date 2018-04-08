@@ -146,4 +146,9 @@ class TeacherController extends BaseController
 
         return formatResponse($act, [], 1);
     }
+
+    public function importErrorLogs()
+    {
+
+    }
 }

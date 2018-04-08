@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\ImportErrorLog;
 use App\Models\Student;
 use Illuminate\Http\Request;
 
