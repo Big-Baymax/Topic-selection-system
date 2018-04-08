@@ -39,6 +39,7 @@
 
 
 @yield('linkjs')
+@yield('js')
 <script>
     //验证插件初始化
     $.validator.setDefaults({
@@ -56,5 +57,4 @@
         validClass: "help-block m-b-none",
     })
 </script>
-@yield('js')
 </html>
