@@ -9,7 +9,7 @@ class TeacherController extends BaseController
 {
     public function __construct()
     {
-        $this->checkPolicy('admin');
+//        $this->checkPolicy('admin');
     }
 
     public function list()

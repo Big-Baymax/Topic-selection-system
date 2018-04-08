@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Student;
+use App\Models\Topic;
+use App\Models\TopicCategory;
 use Illuminate\Http\Request;
 
-class StudentController extends BaseController
+class TopicCategoryController extends BaseController
 {
     public function __construct()
     {
@@ -14,7 +15,7 @@ class StudentController extends BaseController
 
     public function list()
     {
-        return view('admin/student/index');
+        return view('admin/teacher/index');
     }
 
     public function index(Request $request)
@@ -25,10 +26,9 @@ class StudentController extends BaseController
         $sortName = array_get($input, 'sortName', '');
         $sortOrder = array_get($input, 'sortOrder', 'desc');
         $searchText = array_get($input, 'searchText', '');
-        $query = Student::query();
+        $query = TopicCategory::query();
         if ($searchText) {
-            $query->where('stuNo', 'like', '%' . $searchText . '%')
-                ->orWhere('name', 'like', '%' . $searchText . '%');
+            $query->Where('name', 'like', '%' . $searchText . '%');
         }
         if ($sortName) {
             $query->orderBy($sortName, $sortOrder);
@@ -47,70 +47,61 @@ class StudentController extends BaseController
 
     public function create()
     {
-        return view('admin/student/add');
+        return view('admin/topicCategory/add');
     }
 
     public function store(Request $request)
     {
         $validateData = $this->validateMiddle($request->post(), [
-            'stuNo' => 'required|max:32|unique:students',
-            'name' => 'required|max:20',
-            'sex' => 'required',
-            'password' => 'required',
+            'name' => 'required|max:20|unique:topic_categories',
+            'weight' => 'required|numeric',
         ], [
-            'teacherNo.required' => '请输入学号～～',
-            'teacherNo.max' => '请输入符合规范的学号～～',
-            'teacherNo.unique' => '请输入符合规范的学号～～',
-            'name.*' => '请输入符合规范的姓名～～',
-            'sex.required' => '请选择性别～～',
-            'password.required' => '请输入登录密码～～'
+            'name.max' => '请输入符合规范的分类名称～～',
+            'name.required' => '请输入分类名称～～',
+            'name.unique' => '分类已存在～～',
+            'weight.*' => '请输入符合规范的权重～～'
         ]);
         if ($validateData) {
             return formatResponse($validateData);
         }
-        $student = new Student();
+        $topic_category = new Topic();
         $input = $request->post();
-        $student->stuNo = $input['stuNo'];
-        $student->name = $input['name'];
-        $student->salt = makeSalt();
-        $student->password = md5($input['password'] . md5($student->salt));
-        $student->save();
+        $topic_category->name = $input['name'];
+        $topic_category->weight = $input['weight'];
+        $topic_category->save();
 
         return formatResponse('操作成功～～', [], 1);
     }
 
     public function edit($id)
     {
-        $student = Student::find($id);
+        $teacher = TopicCategory::find($id);
 
         return [
             'code' => 1,
-            'data' => $student
+            'data' => $teacher
         ];
     }
 
     public function update(Request $request, $id)
     {
         $validateData = $this->validateMiddle($request->post(), [
-            'stuNo' => 'required|max:32|unique:students,stuNo,' . $id,
-            'name' => 'required|max:20',
-            'sex' => 'required|numeric'
+            'name' => 'required|max:20|unique:topic_categories,name,' . $id,
+            'weight' => 'required|numeric',
         ], [
-            'stuNO.required' => '请输入教师工号～～',
-            'stuNo.max' => '请输入符合规范的教师工号～～',
-            'stuNo.unique' => '请输入符合规范的教师工号～～',
-            'name.*' => '请输入符合规范的姓名～～',
-            'sex.*' => '请选择性别～～'
+            'name.max' => '请输入符合规范的分类名称～～',
+            'name.required' => '请输入分类名称～～',
+            'name.unique' => '分类已存在～～',
+            'weight.*' => '请输入符合规范的权重～～'
         ]);
         if ($validateData) {
             return formatResponse($validateData);
         }
-        $student = Student::findOrFail($id);
+        $topic_category = TopicCategory::findOrFail($id);
         $input = $request->post();
-        $student->stuNo = $input['stuNo'];
-        $student->name = $input['name'];
-        $student->sex = $input['sex'];
-        $student->save();
+        $topic_category->name = $input['name'];
+        $topic_category->weight = $input['weight'];
+        $topic_category->save();
 
         return formatResponse('操作成功～～', [], 1);
     }
@@ -129,17 +120,17 @@ class StudentController extends BaseController
         }
         $act = $request->post('act');
         $id = $request->post('id');
-        $student = Student::find($id);
-        if (!$student) {
-            return formatResponse('该教师不存在～～');
+        $topic_category = TopicCategory::find($id);
+        if (!$topic_category) {
+            return formatResponse('该分类不存在～～');
         }
         switch ($act) {
             case 'recover':
-                $student->status = 1;
+                $topic_category->status = 1;
                 $act = '恢复成功～～';
                 break;
             case 'remove':
-                $student->status = 0;
+                $topic_category->status = 0;
                 $act = '禁用成功～～';
                 break;
         }
