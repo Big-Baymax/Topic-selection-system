@@ -49,9 +49,21 @@ class BaseController extends Controller
 
     protected function getCurrentIdentity()
     {
-        $admin_user = session()->get(config('common.admin_remember_session'));
+        $admin_user = $this->getCurrentUserSesssion();
         $identity = (explode('#', $admin_user))[1];
 
         return $identity;
+    }
+
+    protected function getCurrentUserSesssion()
+    {
+        $admin_user = session()->get(config('common.admin_remember_session'));
+
+        return $admin_user;
+    }
+
+    protected function setLoginStatus($user, $identity)
+    {
+        session([config('common.admin_remember_session') => $user->id . '#' . $identity . '#' . md5($user->password . $user->salt)]);
     }
 }

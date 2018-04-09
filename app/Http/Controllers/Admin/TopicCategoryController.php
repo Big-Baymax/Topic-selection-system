@@ -45,11 +45,6 @@ class TopicCategoryController extends BaseController
         ];
     }
 
-    public function create()
-    {
-        return view('admin/topicCategory/add');
-    }
-
     public function store(Request $request)
     {
         $validateData = $this->validateMiddle($request->post(), [
@@ -71,16 +66,6 @@ class TopicCategoryController extends BaseController
         $topic_category->save();
 
         return formatResponse('操作成功～～', [], 1);
-    }
-
-    public function edit($id)
-    {
-        $teacher = TopicCategory::find($id);
-
-        return [
-            'code' => 1,
-            'data' => $teacher
-        ];
     }
 
     public function update(Request $request, $id)
@@ -109,32 +94,28 @@ class TopicCategoryController extends BaseController
     public function ops(Request $request)
     {
         $validateData = $this->validateMiddle($request->post(), [
-            'id' => 'required',
-            'act' => 'required|in:recover,remove'
+            'id' => 'required|array',
         ], [
             'id.required' => '请选择要操作的对象～～',
-            'act.*' => '操作有误～～'
+            'id.array' => '传递的ids有问题～～'
         ]);
         if ($validateData) {
             return formatResponse($validateData);
         }
-        $act = $request->post('act');
-        $id = $request->post('id');
-        $topic_category = TopicCategory::find($id);
-        if (!$topic_category) {
-            return formatResponse('该分类不存在～～');
+        $ids = $request->post('id');
+        $topic_categories = TopicCategory::findMany($ids);
+        if (!$topic_categories) {
+            return formatResponse('管理员不存在～～');
         }
-        switch ($act) {
-            case 'recover':
-                $topic_category->status = 1;
-                $act = '恢复成功～～';
-                break;
-            case 'remove':
-                $topic_category->status = 0;
-                $act = '禁用成功～～';
-                break;
+        foreach ($topic_categories as $item) {
+            if ($item->status == 0) {
+                $item->status = 1;
+            } else {
+                $item->status = 0;
+            }
+            $item->save();
         }
 
-        return formatResponse($act, [], 1);
+        return formatResponse('操作成功', [], 1);
     }
 }

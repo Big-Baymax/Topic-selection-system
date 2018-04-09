@@ -118,33 +118,54 @@ class TeacherController extends BaseController
     public function ops(Request $request)
     {
         $validateData = $this->validateMiddle($request->post(), [
-            'id' => 'required',
-            'act' => 'required|in:recover,remove'
+            'id' => 'required|array',
         ], [
             'id.required' => '请选择要操作的对象～～',
-            'act.*' => '操作有误～～'
+            'id.array' => '传递的ids有问题～～'
         ]);
         if ($validateData) {
             return formatResponse($validateData);
         }
-        $act = $request->post('act');
-        $id = $request->post('id');
-        $teacher = Teacher::find($id);
-        if (!$teacher) {
-            return formatResponse('该教师不存在～～');
+        $ids = $request->post('id');
+        $teachers = Teacher::findMany($ids);
+        if (!$teachers) {
+            return formatResponse('教师不存在～～');
         }
-        switch ($act) {
-            case 'recover':
-                $teacher->status = 1;
-                $act = '恢复成功～～';
-                break;
-            case 'remove':
-                $teacher->status = 0;
-                $act = '禁用成功～～';
-                break;
+        foreach ($teachers as $item) {
+            if ($item->status == 0) {
+                $item->status = 1;
+            } else {
+                $item->status = 0;
+            }
+            $item->save();
         }
 
-        return formatResponse($act, [], 1);
+        return formatResponse('操作成功', [], 1);
+    }
+
+    public function resetPwd(Request $request)
+    {
+        $validateData = $this->validateMiddle($request->post(), [
+            'id' => 'required|array',
+        ], [
+            'id.required' => '请选择要操作的对象～～',
+            'id.array' => '传递的ids有问题～～'
+        ]);
+        if ($validateData) {
+            return formatResponse($validateData);
+        }
+        $ids = $request->post('id');
+        $teachers = Teacher::findMany($ids);
+        if (!$teachers) {
+            return formatResponse('管理员不存在～～');
+        }
+        foreach ($teachers as $item) {
+            $item->salt = config('common.default_salt');
+            $item->password = md5(123456 . md5($item->salt));
+            $item->save();
+        }
+
+        return formatResponse('重置成功～～', [], 1);
     }
 
     public function importErrorLogs()

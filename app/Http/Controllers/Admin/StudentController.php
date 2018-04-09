@@ -46,11 +46,6 @@ class StudentController extends BaseController
         ];
     }
 
-    public function create()
-    {
-        return view('admin/student/add');
-    }
-
     public function store(Request $request)
     {
         $validateData = $this->validateMiddle($request->post(), [
@@ -80,16 +75,6 @@ class StudentController extends BaseController
         return formatResponse('操作成功～～', [], 1);
     }
 
-    public function edit($id)
-    {
-        $student = Student::find($id);
-
-        return [
-            'code' => 1,
-            'data' => $student
-        ];
-    }
-
     public function update(Request $request, $id)
     {
         $validateData = $this->validateMiddle($request->post(), [
@@ -97,7 +82,7 @@ class StudentController extends BaseController
             'name' => 'required|max:20',
             'sex' => 'required|numeric'
         ], [
-            'stuNO.required' => '请输入教师工号～～',
+            'stuNo.required' => '请输入教师工号～～',
             'stuNo.max' => '请输入符合规范的教师工号～～',
             'stuNo.unique' => '请输入符合规范的教师工号～～',
             'name.*' => '请输入符合规范的姓名～～',
@@ -119,32 +104,53 @@ class StudentController extends BaseController
     public function ops(Request $request)
     {
         $validateData = $this->validateMiddle($request->post(), [
-            'id' => 'required',
-            'act' => 'required|in:recover,remove'
+            'id' => 'required|array',
         ], [
             'id.required' => '请选择要操作的对象～～',
-            'act.*' => '操作有误～～'
+            'id.array' => '传递的ids有问题～～'
         ]);
         if ($validateData) {
             return formatResponse($validateData);
         }
-        $act = $request->post('act');
-        $id = $request->post('id');
-        $student = Student::find($id);
-        if (!$student) {
-            return formatResponse('该教师不存在～～');
+        $ids = $request->post('id');
+        $students = Student::findMany($ids);
+        if (!$students) {
+            return formatResponse('学生不存在～～');
         }
-        switch ($act) {
-            case 'recover':
-                $student->status = 1;
-                $act = '恢复成功～～';
-                break;
-            case 'remove':
-                $student->status = 0;
-                $act = '禁用成功～～';
-                break;
+        foreach ($students as $item) {
+            if ($item->status == 0) {
+                $item->status = 1;
+            } else {
+                $item->status = 0;
+            }
+            $item->save();
         }
 
-        return formatResponse($act, [], 1);
+        return formatResponse('操作成功', [], 1);
+    }
+
+    public function resetPwd(Request $request)
+    {
+        $validateData = $this->validateMiddle($request->post(), [
+            'id' => 'required|array',
+        ], [
+            'id.required' => '请选择要操作的对象～～',
+            'id.array' => '传递的ids有问题～～'
+        ]);
+        if ($validateData) {
+            return formatResponse($validateData);
+        }
+        $ids = $request->post('id');
+        $students = Student::findMany($ids);
+        if (!$students) {
+            return formatResponse('管理员不存在～～');
+        }
+        foreach ($students as $item) {
+            $item->salt = config('common.default_salt');
+            $item->password = md5(123456 . md5($item->salt));
+            $item->save();
+        }
+
+        return formatResponse('重置成功～～', [], 1);
     }
 }

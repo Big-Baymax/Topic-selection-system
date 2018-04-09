@@ -18,9 +18,6 @@ class CreateDepartmentsTableAndAddForeignKey extends Migration
             $table->string('name', 20)->comment('系名');
             $table->timestamps();
         });
-        Schema::table('administrators', function (Blueprint $table) {
-            $table->integer('department_id')->after('mobile');
-        });
         Schema::table('students', function (Blueprint $table) {
             $table->integer('department_id')->after('name');
         });
@@ -37,9 +34,6 @@ class CreateDepartmentsTableAndAddForeignKey extends Migration
     public function down()
     {
         Schema::drop('departments');
-        Schema::table('administrators', function (Blueprint $table) {
-            $table->dropColumn('department_id');
-        });
         Schema::table('students', function (Blueprint $table) {
             $table->dropColumn('department_id');
         });

@@ -23,10 +23,11 @@ class checkAdminLogin
             if ($request->ajax()) {
                 return response([
                     'msg' => '未登录，请先登录～～',
-                    'code' => -1
+                    'code' => 1
                 ]);
             } else {
-                return response("<script>window.location.href='login';   </script>");
+                request()->session()->forget(config('common.admin_remember_session'));
+                return response("<script>window.location.href='/admin/login';</script>");
             }
         }
 

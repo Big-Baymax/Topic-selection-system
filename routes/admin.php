@@ -20,16 +20,20 @@ Route::group(['middleware' => 'checkAdminLogin'], function () {
 //    管理员管理
     Route::get('/administrators/index', 'AdministratorController@list');
     Route::resource('/administrators', 'AdministratorController');
-    Route::match(['get', 'post'], '/administrators/reset-pwd/{id}', 'AdministratorController@resetPwd');
+    Route::post('/administrators/reset-pwd', 'AdministratorController@resetPwd');
     Route::post('/administrators/ops', 'AdministratorController@ops');
 
 //    教师管理
     Route::get('/teachers/index', 'TeacherController@list');
     Route::resource('/teachers', 'TeacherController');
     Route::post('/teachers/ops', 'TeacherController@ops');
+    Route::post('/teachers/reset-pwd', 'TeacherController@resetPwd');
+
+//    学生管理
     Route::get('/students/index', 'StudentController@list');
-    Route::resource('/students', 'StudentController');
+    Route::resource('/students', 'StudentController')->except(['create', 'edit', 'destroy']);
     Route::post('/students/ops', 'StudentController@ops');
+    Route::post('/students/reset-pwd', 'StudentController@resetPwd');
 });
 
 Route::get('test', function () {

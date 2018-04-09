@@ -46,11 +46,6 @@ class AdministratorController extends BaseController
         ];
     }
 
-    public function create()
-    {
-        return view('admin/administrator/add');
-    }
-
     public function store(Request $request)
     {
         $validateData = $this->validateMiddle($request->post(), [
@@ -79,16 +74,6 @@ class AdministratorController extends BaseController
         $administrator->save();
 
         return formatResponse('操作成功～～', [], 1);
-    }
-
-    public function edit($id)
-    {
-        $administrator = Administrator::find($id);
-
-        return [
-            'code' => 1,
-            'data' => $administrator
-        ];
     }
 
     public function update(Request $request, $id)
@@ -120,54 +105,57 @@ class AdministratorController extends BaseController
     public function ops(Request $request)
     {
         $validateData = $this->validateMiddle($request->post(), [
-            'id' => 'required',
-            'act' => 'required|in:recover,remove'
+            'id' => 'required|array',
         ], [
             'id.required' => '请选择要操作的对象～～',
-            'act.*' => '操作有误～～'
+            'id.array' => '传递的ids有问题～～'
         ]);
         if ($validateData) {
             return formatResponse($validateData);
         }
-        $act = $request->post('act');
-        $id = $request->post('id');
-        $administrator = Administrator::find($id);
-        if (!$administrator) {
-            return formatResponse('该管理员不存在～～');
+        $ids = $request->post('id');
+        $administrators = Administrator::findMany($ids);
+        if (!$administrators) {
+            return formatResponse('管理员不存在～～');
         }
-        switch ($act) {
-            case 'recover':
-                $administrator->status = 1;
-                $act = '恢复成功～～';
-                break;
-            case 'remove':
-                $administrator->status = 0;
-                $act = '禁用成功～～';
-                break;
+        foreach ($administrators as $item) {
+            if ($item->status == 0) {
+                $item->status = 1;
+            } else {
+                $item->status = 0;
+            }
+            $item->save();
         }
 
-        return formatResponse($act, [], 1);
+        return formatResponse('操作成功', [], 1);
     }
 
-    public function resetPwd(Request $request, $id)
+    public function resetPwd(Request $request)
     {
-        if ($request->isMethod('get')) {
-            return view('admin/administrators/reset-pwd', compact('id'));
+        $validateData = $this->validateMiddle($request->post(), [
+            'id' => 'required|array',
+        ], [
+            'id.required' => '请选择要操作的对象～～',
+            'id.array' => '传递的ids有问题～～'
+        ]);
+        if ($validateData) {
+            return formatResponse($validateData);
         }
-        $input = $request->post();
-        $password = array_get($input, 'password', '');
-        if (!$id) {
-            return formatResponse('请选择要操作的对象～～');
+        $ids = $request->post('id');
+        $administrators = Administrator::findMany($ids);
+        if (!$administrators) {
+            return formatResponse('管理员不存在～～');
         }
-        $administrator = Administrator::find($id);
-        if (!$administrator) {
-            return formatResponse('该管理员不存在～～');
+        $identity = $this->getCurrentIdentity();
+        $current_user = $request->attributes->get('user');
+        foreach ($administrators as $item) {
+            $item->salt = config('common.default_salt');
+            $item->password = md5(123456 . md5($item->salt));
+            $item->save();
+            if ($item->id == $current_user->id) {
+                $this->setLoginStatus($item, $identity);
+            }
         }
-        if (!$password) {
-            return formatResponse('请输入密码～～');
-        }
-        $administrator->password = md5($password . md5($administrator->salt));
-        $administrator->save();
 
         return formatResponse('重置成功～～', [], 1);
     }
