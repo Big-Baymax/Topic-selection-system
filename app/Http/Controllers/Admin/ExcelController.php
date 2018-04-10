@@ -7,6 +7,7 @@ use App\Http\Services\ImportErrorLogService;
 use App\Models\Department;
 use App\Models\ImportErrorLog;
 use App\Models\Student;
+use App\Models\Teacher;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -15,11 +16,16 @@ class ExcelController extends BaseController
 {
     public function import(Request $request)
     {
-        $students_data = $request->file('students');
-        if (!$students_data) {
-            return formatResponse('上传失败～～');
+        $from = $request->post('from', '');
+        if (!in_array($from, ['students', 'teachers'])) {
+            return formatResponse('来路不明的请求～～');
         }
-        $ext = $students_data->getClientOriginalExtension();
+
+        $data = $request->file($from);
+        if (!$data) {
+            return formatResponse('未获取到上传的东西～～');
+        }
+        $ext = $data->getClientOriginalExtension();
         if (!in_array($ext, config('common.excel_ext'))) {
             return formatResponse('请选择正确的文件类型～～');
         }
@@ -29,22 +35,34 @@ class ExcelController extends BaseController
             mkdir($store_path);
             chmod($store_path, 0777);
         }
-        $filePath = $students_data->storeAs('/public/excels', md5(time()) . '.xls');
+        $filePath = $data->storeAs('/public/excels', md5(time()) . '.xls');
         $filePath = storage_path() . '/app/' . $filePath;
         chmod($filePath, 0777);
         $success_count = $error_count = $flag = 0;
-        Excel::load($filePath, function($reader) use ($filePath, &$success_count, &$error_count, &$flag, &$errorData) {
+
+        Excel::load($filePath, function($reader) use ($filePath, &$success_count, &$error_count, &$flag, &$errorData, $from) {
             $insertData = [];
             $rawCollection = $reader->all()->toArray();
             if (!$rawCollection) {
                 return false;
             }
-            $student_mapping = Student::get()
+
+            if ($from == 'students') {
+                $user_mapping = Student::get()
                     ->pluck('id', 'stuNo')
                     ->toArray();
-            $department_mapping = Department::get()
-                    ->pluck('id', 'name')
+                $identity = '学号';
+            } else {
+                $user_mapping = Teacher::get()
+                    ->pluck('id', 'teacherNo')
                     ->toArray();
+                $identity = '教师工号';
+            }
+            $no = ($identity == '教师工号' ? 'teacherNo' : 'stuNo');
+
+            $department_mapping = Department::get()
+                ->pluck('id', 'name')
+                ->toArray();
             $sex_mapping = array_flip(config('common.sex_mapping'));
 //            初筛
             foreach ($rawCollection as $key => $cellCollection) {
@@ -54,8 +72,8 @@ class ExcelController extends BaseController
                 }
                 foreach ($cellCollection as $key1 => $item) {
                     switch ($key1) {
-                        case '学号':
-                            $insertData[$key]['stuNo'] = trim($item);
+                        case $identity:
+                            $insertData[$key][$no] = trim($item);
                             break;
                         case '姓名':
                             $insertData[$key]['name'] = trim($item);
@@ -78,12 +96,14 @@ class ExcelController extends BaseController
             $fields = [
                 'created_at' => $now,
                 'list' => $list_order,
+                'table' => $from,
                 'reason' => ''
             ];
+            dd($insertData);
             foreach ($insertData as $key => $item) {
-                if (!$item['department_id'] || !$item['stuNo'] || !$item['name']) {
-                    $fields['reason'] = '学号、姓名、系别不能为空';
-                    $error_list = self::makeErrorResult($error_list, $error_count, $item, $fields);
+                if (!$item['department_id'] || !$item[$no] || !$item['name']) {
+                    $fields['reason'] = $identity . '、姓名、系别不能为空';
+                    $error_list = self::makeErrorResult($error_list, $error_count, $item, $no, $fields);
                     $errorData[$error_count]['error_raw'] = $key + 2;
                     $errorData[$error_count]['error_msg'] = '学号、姓名、系别不能为空';
                     $error_count += 1;
@@ -92,31 +112,31 @@ class ExcelController extends BaseController
                 }
                 if (!in_array($item['department_id'], array_keys($department_mapping))) {
                     $fields['reason'] = '系别填写有误';
-                    $error_list = self::makeErrorResult($error_list, $error_count, $item, $fields);
+                    $error_list = self::makeErrorResult($error_list, $error_count, $item, $no, $fields);
                     $errorData[$error_count]['error_raw'] = $key + 2;
                     $errorData[$error_count]['error_msg'] = '系别填写有误';
                     $error_count += 1;
                     unset($insertData[$key]);
                     continue;
                 }
-                if (in_array($item['stuNo'], array_keys($student_mapping))) {
-                    $fields['reason'] = '学号已存在';
-                    $error_list = self::makeErrorResult($error_list, $error_count, $item, $fields);
+                if (in_array($item[$no], array_keys($user_mapping))) {
+                    $fields['reason'] = $identity . '已存在';
+                    $error_list = self::makeErrorResult($error_list, $error_count, $item, $no, $fields);
                     $errorData[$error_count]['error_raw'] = $key + 2;
                     $errorData[$error_count]['error_msg'] = '学号已存在';
                     $error_count += 1;
                     unset($insertData[$key]);
                     continue;
                 }
-                if (strlen($item['stuNo'] > 32) || strlen($item['name']) > 20) {
-                    $fields['reason'] = '学号或姓名过长';
-                    $error_list = self::makeErrorResult($error_list, $error_count, $item, $fields);
+                if (strlen($item[$no] > 32) || strlen($item['name']) > 20) {
+                    $fields['reason'] = $identity . '或姓名过长';
+                    $error_list = self::makeErrorResult($error_list, $error_count, $item, $no, $fields);
                     unset($insertData[$key]);
                     continue;
                 }
                 if (!in_array($item['sex'], array_keys($sex_mapping))) {
                     $fields['reason'] = '性别填写有误';
-                    $error_list = self::makeErrorResult($error_list, $error_count, $item, $fields);
+                    $error_list = self::makeErrorResult($error_list, $error_count, $item, $no, $fields);
                     unset($insertData[$key]);
                     continue;
                 }
@@ -128,12 +148,13 @@ class ExcelController extends BaseController
                 $insertData[$key]['updated_at'] = $now;
             }
 
-            DB::table('students')->insert($insertData);
+            DB::table($from)->insert($insertData);
             DB::table('import_error_logs')->insert($error_list);
             $success_count = count($insertData);
             unlink($filePath);
             $flag = true;
         });
+
         if ($flag) {
             return formatResponse("导入成功～～成功{$success_count}条，失败{$error_count}条", $errorData, 1);
         } else {
@@ -141,27 +162,18 @@ class ExcelController extends BaseController
         }
     }
 
-    public function studentImport()
-    {
 
-    }
-
-    public function teacherImport()
-    {
-
-    }
-
-    private static function makeErrorResult($error_list, $error_count, $item, $fields)
+    private static function makeErrorResult($error_list, $error_count, $item, $no, $fields)
     {
         $error_list[$error_count] = [
-            'stuNo' => $item['stuNo'],
-            'table' => 'students',
+            $no => $item[$no],
             'name' => $item['name'],
             'department' => $item['department_id'],
             'sex' => $item['sex'],
             'reason' => $fields['reason'],
             'created_at' => $fields['created_at'],
-            'list' => $fields['list']
+            'list' => $fields['list'],
+            'table' => $fields['table']
         ];
 
         return $error_list;
@@ -205,5 +217,4 @@ class ExcelController extends BaseController
             });
         })->download('xls');
     }
-
 }

@@ -22,12 +22,14 @@ Route::group(['middleware' => 'checkAdminLogin'], function () {
     Route::resource('/administrators', 'AdministratorController');
     Route::post('/administrators/reset-pwd', 'AdministratorController@resetPwd');
     Route::post('/administrators/ops', 'AdministratorController@ops');
+    Route::post('/administrators/delete', 'AdministratorController@delete');
 
 //    教师管理
     Route::get('/teachers/index', 'TeacherController@list');
     Route::resource('/teachers', 'TeacherController');
     Route::post('/teachers/ops', 'TeacherController@ops');
     Route::post('/teachers/reset-pwd', 'TeacherController@resetPwd');
+    Route::post('/teachers/delete', 'TeacherController@resetPwd');
 
 //    学生管理
     Route::get('/students/index', 'StudentController@list');

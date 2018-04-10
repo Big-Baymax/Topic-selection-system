@@ -7,4 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Student extends Model
 {
     protected $hidden = ['password', 'salt', 'updated_at'];
+
+    public function department()
+    {
+        return $this->belongsTo(Department::class, 'department_id', 'id')->select(['id', 'name']);
+    }
 }

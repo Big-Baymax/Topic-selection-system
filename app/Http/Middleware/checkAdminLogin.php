@@ -67,6 +67,9 @@ class checkAdminLogin
                 $user = Teacher::find($id);
                 break;
         }
+        if (!$user) {
+            return false;
+        }
         $tmp_auth_token = md5($user->password . $user->salt);
         if ($tmp_auth_token !== $auth_token) {
             return false;

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Administrator;
+use App\Models\Department;
+use function foo\func;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
@@ -15,7 +17,7 @@ class AdministratorController extends BaseController
 
     public function list()
     {
-        return view('admin/administrator/index');
+        return view('admin/administrator/index', compact('departments'));
     }
 
     public function index(Request $request)
@@ -38,7 +40,6 @@ class AdministratorController extends BaseController
         $data = $query->offset(($pageNumber - 1) * $pageSize)
                 ->take($pageSize)
                 ->get();
-
         return [
             'total' => $total,
             'data' => $data,
@@ -127,7 +128,7 @@ class AdministratorController extends BaseController
             $item->save();
         }
 
-        return formatResponse('操作成功', [], 1);
+        return formatResponse('操作成功～～', [], 1);
     }
 
     public function resetPwd(Request $request)
@@ -158,5 +159,26 @@ class AdministratorController extends BaseController
         }
 
         return formatResponse('重置成功～～', [], 1);
+    }
+
+    public function delete(Request $request)
+    {
+        $validateData = $this->validateMiddle($request->post(), [
+            'id' => 'required|array',
+        ], [
+            'id.required' => '请选择要操作的对象～～',
+            'id.array' => '传递的ids有问题～～'
+        ]);
+        if ($validateData) {
+            return formatResponse($validateData);
+        }
+        $ids = $request->post('id');
+        $administrators = Administrator::findMany($ids);
+        if (!$administrators) {
+            return formatResponse('管理员不存在～～');
+        }
+        Administrator::whereIn('id', $ids)->delete();
+
+        return formatResponse('删除成功～～', [], 1);
     }
 }
