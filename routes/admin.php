@@ -19,14 +19,14 @@ Route::group(['middleware' => 'checkAdminLogin'], function () {
     Route::get('/logout', 'LoginController@logout');
 //    管理员管理
     Route::get('/administrators/index', 'AdministratorController@list');
-    Route::resource('/administrators', 'AdministratorController');
+    Route::resource('/administrators', 'AdministratorController')->except(['create', 'edit', 'destroy']);
     Route::post('/administrators/reset-pwd', 'AdministratorController@resetPwd');
     Route::post('/administrators/ops', 'AdministratorController@ops');
     Route::post('/administrators/delete', 'AdministratorController@delete');
 
 //    教师管理
     Route::get('/teachers/index', 'TeacherController@list');
-    Route::resource('/teachers', 'TeacherController');
+    Route::resource('/teachers', 'TeacherController')->except(['create', 'edit', 'destroy']);
     Route::post('/teachers/ops', 'TeacherController@ops');
     Route::post('/teachers/reset-pwd', 'TeacherController@resetPwd');
     Route::post('/teachers/delete', 'TeacherController@resetPwd');
@@ -36,6 +36,16 @@ Route::group(['middleware' => 'checkAdminLogin'], function () {
     Route::resource('/students', 'StudentController')->except(['create', 'edit', 'destroy']);
     Route::post('/students/ops', 'StudentController@ops');
     Route::post('/students/reset-pwd', 'StudentController@resetPwd');
+
+//    分类管理
+    Route::get('/topicCategories/index', 'TopicCategoryController@list');
+    Route::resource('/topicCategories', 'TopicCategoryController')->except(['create', 'edit', 'destroy']);
+    Route::post('/topicCategories/delete', 'TopicCategoryController@delete');
+
+//    选题管理
+    Route::get('/topics/index', 'TopicController@list');
+    Route::resource('/topics', 'TopicController')->except(['create', 'edit', 'destroy']);
+    Route::post('/topics/delete', 'TopicController@delete');
 });
 
 Route::get('test', function () {

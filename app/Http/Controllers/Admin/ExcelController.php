@@ -66,6 +66,9 @@ class ExcelController extends BaseController
             $sex_mapping = array_flip(config('common.sex_mapping'));
 //            初筛
             foreach ($rawCollection as $key => $cellCollection) {
+                if (array_keys($cellCollection) !== [$identity, '姓名', '性别', '系别']) {
+                    return false;
+                }
                 if (!$cellCollection) {
                     unset($rawCollection[$key]);
                     continue;
@@ -85,6 +88,7 @@ class ExcelController extends BaseController
                             $insertData[$key]['sex'] = trim($item);
                             break;
                     }
+
                 }
             }
 //            复筛
@@ -99,7 +103,6 @@ class ExcelController extends BaseController
                 'table' => $from,
                 'reason' => ''
             ];
-            dd($insertData);
             foreach ($insertData as $key => $item) {
                 if (!$item['department_id'] || !$item[$no] || !$item['name']) {
                     $fields['reason'] = $identity . '、姓名、系别不能为空';

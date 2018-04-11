@@ -369,6 +369,7 @@ class ComposerStaticInitb77e4dc30c2c1515bf36551843780dba
         'App\\Http\\Controllers\\Admin\\StudentController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/StudentController.php',
         'App\\Http\\Controllers\\Admin\\TeacherController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/TeacherController.php',
         'App\\Http\\Controllers\\Admin\\TopicCategoryController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/TopicCategoryController.php',
+        'App\\Http\\Controllers\\Admin\\TopicController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/TopicController.php',
         'App\\Http\\Controllers\\Admin\\WelcomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/WelcomeController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',

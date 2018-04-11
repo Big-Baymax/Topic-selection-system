@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Topic;
 use App\Models\TopicCategory;
 use Illuminate\Http\Request;
 
-class TopicCategoryController extends BaseController
+class TopicController extends BaseController
 {
     public function __construct()
     {
-//        $this->checkPolicy('admin');
+        $this->checkPolicy('teacher');
     }
 
     public function list()
     {
-        return view('admin/topic/category');
+        $categories = TopicCategory::all();
+
+        return view('admin/topic/index', compact('categories'));
     }
 
     public function index(Request $request)
@@ -25,7 +28,7 @@ class TopicCategoryController extends BaseController
         $sortName = array_get($input, 'sortName', '');
         $sortOrder = array_get($input, 'sortOrder', 'desc');
         $searchText = array_get($input, 'searchText', '');
-        $query = TopicCategory::query();
+        $query = Topic::query();
         if ($searchText) {
             $query->Where('name', 'like', '%' . $searchText . '%');
         }
@@ -34,8 +37,18 @@ class TopicCategoryController extends BaseController
         }
         $total = $query->count();
         $data = $query->offset(($pageNumber - 1) * $pageSize)
+            ->with(['student', 'category'])
             ->take($pageSize)
-            ->get();
+            ->get()
+            ->toArray();
+        $topic_status_mapping = config('common.topic_status');
+        foreach ($data as $key => $item) {
+            $data[$key]['category'] = $item['category']['name'];
+            if ($item['student']) {
+                $data[$key]['student'] = $item['student']['name'];
+            }
+            $data[$key]['status'] = $topic_status_mapping[$item['status']];
+        }
 
         return [
             'total' => $total,
@@ -47,22 +60,28 @@ class TopicCategoryController extends BaseController
     public function store(Request $request)
     {
         $validateData = $this->validateMiddle($request->post(), [
-            'name' => 'required|max:20|unique:topic_categories',
-            'weight' => 'required|numeric',
+            'name' => 'required|max:20|unique:topics',
+            'category_id' => 'required|numeric',
+            'description' => 'required'
         ], [
-            'name.max' => '请输入符合规范的分类名称～～',
-            'name.required' => '请输入分类名称～～',
-            'name.unique' => '分类已存在～～',
-            'weight.*' => '请输入符合规范的权重～～'
+            'name.max' => '请输入符合规范的选题名称～～',
+            'name.required' => '请输入选题名称～～',
+            'name.unique' => '选题名称已存在～～',
+            'category.*' => '请选择分类～～',
+            'description.required' => '请输入选题描述'
         ]);
         if ($validateData) {
             return formatResponse($validateData);
         }
-        $topic_category = new TopicCategory();
+        $teacher = $request->attributes->get('user');
+        $topic = new Topic();
         $input = $request->post();
-        $topic_category->name = $input['name'];
-        $topic_category->weight = $input['weight'];
-        $topic_category->save();
+        $topic->name = $input['name'];
+        $topic->category_id = $input['category_id'];
+        $topic->description = $input['description'];
+        $topic->teacher_id = $teacher->id;
+        $topic->department_id = $teacher->department_id;
+        $topic->save();
 
         return formatResponse('操作成功～～', [], 1);
     }
@@ -70,22 +89,25 @@ class TopicCategoryController extends BaseController
     public function update(Request $request, $id)
     {
         $validateData = $this->validateMiddle($request->post(), [
-            'name' => 'required|max:20|unique:topic_categories,name,' . $id,
-            'weight' => 'required|numeric',
+            'name' => 'required|max:20|unique:topics,name,' . $id,
+            'category_id' => 'required|numeric',
+            'description' => 'required'
         ], [
-            'name.max' => '请输入符合规范的分类名称～～',
-            'name.required' => '请输入分类名称～～',
-            'name.unique' => '分类已存在～～',
-            'weight.*' => '请输入符合规范的权重～～'
+            'name.max' => '请输入符合规范的选题名称～～',
+            'name.required' => '请输入选题名称～～',
+            'name.unique' => '选题名称已存在～～',
+            'category.*' => '请选择分类～～',
+            'description.required' => '请输入选题描述'
         ]);
         if ($validateData) {
             return formatResponse($validateData);
         }
-        $topic_category = TopicCategory::findOrFail($id);
+        $topic = Topic::findOrFail($id);
         $input = $request->post();
-        $topic_category->name = $input['name'];
-        $topic_category->weight = $input['weight'];
-        $topic_category->save();
+        $topic->name = $input['name'];
+        $topic->category_id = $input['category_id'];
+        $topic->description = $input['description'];
+        $topic->save();
 
         return formatResponse('操作成功～～', [], 1);
     }
@@ -123,5 +145,22 @@ class TopicCategoryController extends BaseController
 
         $res = mb_substr($response_msg, 0, 4, 'UTF-8');
         return formatResponse($response_msg, $failed_delete_id, $res == '删除成功' ? 1 : 0);
+    }
+
+    public function ops(Request $request)
+    {
+        $validateData = $this->validateMiddle($request->post(), [
+            'id' => 'required',
+        ], [
+            'id.required' => '请选择要操作的对象～～',
+        ]);
+        if ($validateData) {
+            return formatResponse($validateData);
+        }
+        $ids = $request->post('id');
+        $topics = Topic::findMany($ids);
+        if (!$topics) {
+            return formatResponse('选题不存在～～');
+        }
     }
 }

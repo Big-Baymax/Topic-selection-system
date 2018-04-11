@@ -12,5 +12,10 @@ return [
         '2' => '女'
     ],
     'default_salt' => 'HVw~P)cvOwMRQBFM',
-    'excel_ext' => ['xls']
+    'excel_ext' => ['xls'],
+    'topic_status' => [
+        '1' => '尚未被选',
+        '2' => '审核中',
+        '3' => '审核通过'
+    ]
 ];

@@ -16,6 +16,7 @@ return array(
     'App\\Http\\Controllers\\Admin\\StudentController' => $baseDir . '/app/Http/Controllers/Admin/StudentController.php',
     'App\\Http\\Controllers\\Admin\\TeacherController' => $baseDir . '/app/Http/Controllers/Admin/TeacherController.php',
     'App\\Http\\Controllers\\Admin\\TopicCategoryController' => $baseDir . '/app/Http/Controllers/Admin/TopicCategoryController.php',
+    'App\\Http\\Controllers\\Admin\\TopicController' => $baseDir . '/app/Http/Controllers/Admin/TopicController.php',
     'App\\Http\\Controllers\\Admin\\WelcomeController' => $baseDir . '/app/Http/Controllers/Admin/WelcomeController.php',
     'App\\Http\\Controllers\\Controller' => $baseDir . '/app/Http/Controllers/Controller.php',
     'App\\Http\\Kernel' => $baseDir . '/app/Http/Kernel.php',
