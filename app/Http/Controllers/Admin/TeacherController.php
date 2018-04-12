@@ -143,7 +143,7 @@ class TeacherController extends BaseController
             $item->save();
         }
 
-        return formatResponse('操作成功', [], 1);
+        return formatResponse('操作成功～～', [], 1);
     }
 
     public function resetPwd(Request $request)

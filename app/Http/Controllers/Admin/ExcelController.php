@@ -185,22 +185,38 @@ class ExcelController extends BaseController
     public function export(Request $request)
     {
         $list = $request->get('list', '');
+        $table = $request->get('table', '');
         if (!$list) {
             return formatResponse('请选择要下载的错误日志～～');
         }
+        if (!in_array($table, ['students', 'teachers'])) {
+            return formatResponse('未传递table参数');
+        }
+        if ($table == 'students') {
+            $select = ['stuNo', 'name', 'department', 'sex', 'reason'];
+            $error_list = [
+                ['学号', '姓名', '系别', '性别', '原因']
+            ];
+            $no = 'stuNo';
+        } else {
+            $select = ['teacherNo', 'name', 'department', 'sex', 'reason'];
+            $error_list = [
+                ['教师工号', '姓名', '系别', '性别', '原因']
+            ];
+            $no = 'teacherNo';
+        }
         $import_error_logs = ImportErrorLog::where('list', $list)
-                ->select(['stuNo', 'name', 'department', 'sex', 'reason'])
+                ->where('table', $table)
+                ->select($select)
                 ->get()
                 ->toArray();
         if (!$import_error_logs) {
             return formatResponse('该日志不存在～～');
         }
-        $error_list = [
-            ['学号', '姓名', '系别', '性别', '原因']
-        ];
+
         foreach ($import_error_logs as $key => $error_log) {
             $error_list[$key+1] = [
-                $error_log['stuNo'],
+                $error_log[$no],
                 $error_log['name'],
                 $error_log['department'],
                 $error_log['sex'],

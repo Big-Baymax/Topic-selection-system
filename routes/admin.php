@@ -47,14 +47,18 @@ Route::group(['middleware' => 'checkAdminLogin'], function () {
     Route::get('/topics/index', 'TopicController@list');
     Route::resource('/topics', 'TopicController')->except(['create', 'edit', 'destroy']);
     Route::post('/topics/delete', 'TopicController@delete');
+
+//    批量导入
+    Route::get('/excel/import/logs', 'ImportErrorLogController@list');
+    Route::post('/excel/import', 'ExcelController@import');
+    Route::get('/excel/export', 'ExcelController@export');
+    Route::post('/excel/import/logs/manage', 'ImportErrorLogController@manage');
 });
 
 Route::get('test', function () {
     return view('admin/test');
 });
-Route::get('/excel/import/logs', 'ImportErrorLogController@list');
-Route::post('/excel/import', 'ExcelController@import');
-Route::get('/excel/export', 'ExcelController@export');
+
 
 Route::get('/setting/time', function () {
     return view('admin/setting/time');
