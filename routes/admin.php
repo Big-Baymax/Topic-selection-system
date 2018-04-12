@@ -49,6 +49,11 @@ Route::group(['middleware' => 'checkAdminLogin'], function () {
     Route::post('/topics/delete', 'TopicController@delete');
     Route::post('/topics/ops', 'TopicController@ops');
 
+//    系别管理
+    Route::get('/departments/index', 'DepartmentController@list');
+    Route::resource('/departments', 'DepartmentController')->except(['create', 'edit', 'destroy']);
+    Route::post('/departments/delete', 'DepartmentController@delete');
+
 //    批量导入
     Route::get('/excel/import/logs', 'ImportErrorLogController@list');
     Route::post('/excel/import', 'ExcelController@import');
