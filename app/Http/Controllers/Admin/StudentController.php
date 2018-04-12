@@ -29,7 +29,11 @@ class StudentController extends BaseController
         $sortName = array_get($input, 'sortName', '');
         $sortOrder = array_get($input, 'sortOrder', 'desc');
         $searchText = array_get($input, 'searchText', '');
+        $department_id = array_get($input, 'department_id', '');
         $query = Student::query();
+        if ($department_id) {
+            $query->where('department_id', $department_id);
+        }
         if ($searchText) {
             $query->where('stuNo', 'like', '%' . $searchText . '%')
                 ->orWhere('name', 'like', '%' . $searchText . '%');
@@ -107,6 +111,7 @@ class StudentController extends BaseController
         $student->stuNo = $input['stuNo'];
         $student->name = $input['name'];
         $student->sex = $input['sex'];
+        $student->department_id = $input['department_id'];
         $student->save();
 
         return formatResponse('操作成功～～', [], 1);
@@ -154,7 +159,7 @@ class StudentController extends BaseController
         $ids = $request->post('id');
         $students = Student::findMany($ids);
         if (!$students) {
-            return formatResponse('管理员不存在～～');
+            return formatResponse('学生不存在～～');
         }
         foreach ($students as $item) {
             $item->salt = config('common.default_salt');
@@ -179,10 +184,10 @@ class StudentController extends BaseController
         $ids = $request->post('id');
         $students = Student::findMany($ids);
         if (!$students) {
-            return formatResponse('管理员不存在～～');
+            return formatResponse('学生不存在～～');
         }
         Student::whereIn('id', $ids)->delete();
 
-        return formatResponse('删除成功～～');
+        return formatResponse('删除成功～～', [], 1);
     }
 }

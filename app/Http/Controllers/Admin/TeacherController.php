@@ -28,7 +28,11 @@ class TeacherController extends BaseController
         $sortName = array_get($input, 'sortName', '');
         $sortOrder = array_get($input, 'sortOrder', 'desc');
         $searchText = array_get($input, 'searchText', '');
+        $department_id = array_get($input, 'department_id', '');
         $query = Teacher::query();
+        if ($department_id) {
+            $query->where('department_id', $department_id);
+        }
         if ($searchText) {
             $query->where('teacherNo', 'like', '%' . $searchText . '%')
                 ->orWhere('name', 'like', '%' . $searchText . '%');
@@ -156,7 +160,7 @@ class TeacherController extends BaseController
         $ids = $request->post('id');
         $teachers = Teacher::findMany($ids);
         if (!$teachers) {
-            return formatResponse('管理员不存在～～');
+            return formatResponse('老师不存在～～');
         }
         foreach ($teachers as $item) {
             $item->salt = config('common.default_salt');
@@ -185,6 +189,6 @@ class TeacherController extends BaseController
         }
         Teacher::whereIn('id', $ids)->delete();
 
-        return formatResponse('删除成功～～');
+        return formatResponse('删除成功～～', [], 1);
     }
 }

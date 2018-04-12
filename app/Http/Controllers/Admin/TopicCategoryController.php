@@ -33,7 +33,8 @@ class TopicCategoryController extends BaseController
             $query->orderBy($sortName, $sortOrder);
         }
         $total = $query->count();
-        $data = $query->offset(($pageNumber - 1) * $pageSize)
+        $data = $query
+            ->offset(($pageNumber - 1) * $pageSize)
             ->take($pageSize)
             ->get();
 

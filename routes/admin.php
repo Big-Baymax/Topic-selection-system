@@ -29,13 +29,14 @@ Route::group(['middleware' => 'checkAdminLogin'], function () {
     Route::resource('/teachers', 'TeacherController')->except(['create', 'edit', 'destroy']);
     Route::post('/teachers/ops', 'TeacherController@ops');
     Route::post('/teachers/reset-pwd', 'TeacherController@resetPwd');
-    Route::post('/teachers/delete', 'TeacherController@resetPwd');
+    Route::post('/teachers/delete', 'TeacherController@delete');
 
 //    学生管理
     Route::get('/students/index', 'StudentController@list');
     Route::resource('/students', 'StudentController')->except(['create', 'edit', 'destroy']);
     Route::post('/students/ops', 'StudentController@ops');
     Route::post('/students/reset-pwd', 'StudentController@resetPwd');
+    Route::post('/students/delete', 'StudentController@delete');
 
 //    分类管理
     Route::get('/topicCategories/index', 'TopicCategoryController@list');

@@ -81,6 +81,7 @@ class TopicController extends BaseController
         $topic->description = $input['description'];
         $topic->teacher_id = $teacher->id;
         $topic->department_id = $teacher->department_id;
+        $topic->status = 1;
         $topic->save();
 
         return formatResponse('操作成功～～', [], 1);
