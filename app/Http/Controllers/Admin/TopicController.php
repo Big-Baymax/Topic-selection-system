@@ -125,24 +125,24 @@ class TopicController extends BaseController
             return formatResponse($validateData);
         }
         $ids = $request->post('id');
-        $topic_categories = TopicCategory::findMany($ids);
-        if (!$topic_categories) {
-            return formatResponse('分类不存在～～');
+        $topics = Topic::findMany($ids);
+        if (!$topics) {
+            return formatResponse('选题不存在～～');
         }
         $failed_delete = '';
         $success_delete = 0;
         $failed_delete_id = [];
-        foreach ($topic_categories as $category) {
-            if ($category->topics()->count() > 0) {
-                $failed_delete .= $category->name . ' ';
-                $failed_delete_id[] = $category->id;
+        foreach ($topics as $topic) {
+            if ($topic->student) {
+                $failed_delete .= $topic->name . ' ';
+                $failed_delete_id[] = $topic->id;
             } else {
                 $success_delete += 1;
-                $category->delete();
+                $topic->delete();
             }
         }
         $response_msg = $success_delete ? '删除成功～～' : '删除失败～～';
-        $response_msg .= $failed_delete ? $failed_delete . '分类下有选题，无法删除' : '';
+        $response_msg .= $failed_delete ? $failed_delete . '已被学生选中，无法删除' : '';
 
         $res = mb_substr($response_msg, 0, 4, 'UTF-8');
         return formatResponse($response_msg, $failed_delete_id, $res == '删除成功' ? 1 : 0);
@@ -150,18 +150,26 @@ class TopicController extends BaseController
 
     public function ops(Request $request)
     {
-        $validateData = $this->validateMiddle($request->post(), [
-            'id' => 'required',
-        ], [
-            'id.required' => '请选择要操作的对象～～',
-        ]);
-        if ($validateData) {
-            return formatResponse($validateData);
+        $id = $request->post('id', '');
+        $act = $request->post('act', '');
+        if (!$id) {
+            return formatResponse('请选择要操作的选题～～');
         }
-        $ids = $request->post('id');
-        $topics = Topic::findMany($ids);
-        if (!$topics) {
-            return formatResponse('选题不存在～～');
+        if (!in_array($act, ['pass', 'fail'])) {
+            return formatResponse('未知的操作～～');
         }
+        $topic = Topic::find($id);
+        if (!$topic) {
+            return formatResponse('没有该选题～～');
+        }
+        if ($act == 'pass') {
+            $topic->status = 3;
+        } else {
+            $topic->student_id = 0;
+            $topic->status = 1;
+        }
+        $topic->save();
+
+        return formatResponse('操作成功～～', [], 1);
     }
 }
