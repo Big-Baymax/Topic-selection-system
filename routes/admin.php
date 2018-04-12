@@ -47,6 +47,7 @@ Route::group(['middleware' => 'checkAdminLogin'], function () {
     Route::get('/topics/index', 'TopicController@list');
     Route::resource('/topics', 'TopicController')->except(['create', 'edit', 'destroy']);
     Route::post('/topics/delete', 'TopicController@delete');
+    Route::post('/topics/ops', 'TopicController@ops');
 
 //    批量导入
     Route::get('/excel/import/logs', 'ImportErrorLogController@list');
