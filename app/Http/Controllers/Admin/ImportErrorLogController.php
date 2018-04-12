@@ -4,9 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\ImportErrorLog;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
-class ImportErrorLogController extends Controller
+class ImportErrorLogController extends BaseController
 {
     public function list(Request $request)
     {
