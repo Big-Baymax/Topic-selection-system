@@ -47,11 +47,6 @@ class LoginController extends Controller
                     ->where('status', 1)
                     ->first();
                     break;
-            case 3:
-                $tmp_user = Student::where('StudentNo', $login_name)
-                    ->where('status', 1)
-                    ->first();
-                    break;
         }
         if (!$tmp_user) {
             return formatResponse('用户名密码不匹配～～');

@@ -36,7 +36,7 @@ class AdministratorController extends BaseController
         if ($sortName) {
             $query->orderBy($sortName, $sortOrder);
         }
-        $total = $query->count();
+        $total = $query->where('is_admin', 0)->count();
         $data = $query->offset(($pageNumber - 1) * $pageSize)
                 ->take($pageSize)
                 ->get();
@@ -116,7 +116,7 @@ class AdministratorController extends BaseController
         }
         $ids = $request->post('id');
         $administrators = Administrator::findMany($ids);
-        if (!$administrators) {
+        if ($administrators->isEmpty()) {
             return formatResponse('管理员不存在～～');
         }
         foreach ($administrators as $item) {

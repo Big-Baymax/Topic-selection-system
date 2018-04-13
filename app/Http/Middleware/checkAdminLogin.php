@@ -27,7 +27,7 @@ class checkAdminLogin
                 ]);
             } else {
                 request()->session()->forget(config('common.admin_remember_session'));
-                return response("<script>window.location.href='/admin/login';</script>");
+                return response("<script>parent.location.href='/admin/login';</script>");
             }
         }
 
@@ -35,7 +35,7 @@ class checkAdminLogin
         \View::composer('admin.index', function($view) use ($res){
             $view->with([
                 'user' => $res['user'],
-                'identity' => config('common.identity_mapping')[$res['identity']]
+                'identity' => $res['user']->is_admin ? '超级' . config('common.identity_mapping')[$res['identity']] : config('common.identity_mapping')[$res['identity']]
             ]);
         });
 
@@ -64,7 +64,7 @@ class checkAdminLogin
                 $user = Administrator::find($id);
                 break;
             case 2:
-                $user = Teacher::find($id);
+                $user = Teacher::with('department')->find($id);
                 break;
         }
         if (!$user) {
