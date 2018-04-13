@@ -7,6 +7,11 @@ use Illuminate\Http\Request;
 
 class ImportErrorLogController extends BaseController
 {
+    public function __construct()
+    {
+        $this->checkPolicy('admin');
+    }
+
     public function list(Request $request)
     {
         $input = $request->all();

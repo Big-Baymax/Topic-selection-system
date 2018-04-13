@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class BaseController extends Controller
@@ -65,5 +66,12 @@ class BaseController extends Controller
     protected function setLoginStatus($user, $identity)
     {
         session([config('common.admin_remember_session') => $user->id . '#' . $identity . '#' . md5($user->password . $user->salt)]);
+    }
+
+    protected function getSettingQuantity()
+    {
+        $setting = DB::table('setting')->first();
+
+        return $setting->quantity;
     }
 }

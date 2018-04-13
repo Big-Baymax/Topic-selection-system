@@ -14,6 +14,11 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class ExcelController extends BaseController
 {
+    public function __construct()
+    {
+        $this->checkPolicy('admin');
+    }
+
     public function import(Request $request)
     {
         $from = $request->post('from', '');

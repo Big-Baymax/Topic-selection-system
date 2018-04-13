@@ -47,7 +47,7 @@
             $(e).closest(".form-group").removeClass("has-success").addClass("has-error")
         },
         success: function (e) {
-            e.closest(".form-group").removeClass("has-error").addClass("has-success")
+            e.closest(".form-group").removeClass("has-errors").addClass("has-success")
         },
         errorElement: "span",
         errorPlacement: function (e, r) {

@@ -22,6 +22,7 @@ class TopicController extends BaseController
 
     public function index(Request $request)
     {
+        $user = $request->attributes->get('user');
         $input = $request->all();
         $pageNumber = array_get($input, 'pageNumber', 1);
         $pageSize = array_get($input, 'pageSize', config('common.page_size'));
@@ -35,19 +36,21 @@ class TopicController extends BaseController
         if ($sortName) {
             $query->orderBy($sortName, $sortOrder);
         }
-        $total = $query->count();
+        $total = $query->where('department_id', $user->department_id)->count();
         $data = $query->offset(($pageNumber - 1) * $pageSize)
-            ->with(['student', 'category'])
+            ->with(['student', 'category', 'teacher'])
             ->take($pageSize)
             ->get()
             ->toArray();
         $topic_status_mapping = config('common.topic_status');
         foreach ($data as $key => $item) {
             $data[$key]['category'] = $item['category']['name'];
+            $data[$key]['teacher'] = $item['teacher']['name'];
             if ($item['student']) {
                 $data[$key]['student'] = $item['student']['name'];
             }
             $data[$key]['status'] = $topic_status_mapping[$item['status']];
+            $data[$key]['current_teacher_id'] = $user->id;
         }
 
         return [
@@ -72,6 +75,12 @@ class TopicController extends BaseController
         ]);
         if ($validateData) {
             return formatResponse($validateData);
+        }
+        $user = $request->attributes->get('user');
+        $current_quantity = Topic::where('teacher_id', $user->id)->count();
+        $limit_quantity = $this->getSettingQuantity();
+        if ($current_quantity >= $limit_quantity) {
+            return formatResponse('每个老师最多只能添加' . $limit_quantity . '个选题～～');
         }
         $teacher = $request->attributes->get('user');
         $topic = new Topic();
@@ -103,7 +112,11 @@ class TopicController extends BaseController
         if ($validateData) {
             return formatResponse($validateData);
         }
+        $user = $request->attributes->get('user');
         $topic = Topic::findOrFail($id);
+        if ($topic->teacher_id != $user->id) {
+            return formatResponse('只能修改自己的选题～～');
+        }
         $input = $request->post();
         $topic->name = $input['name'];
         $topic->category_id = $input['category_id'];
@@ -126,23 +139,34 @@ class TopicController extends BaseController
         }
         $ids = $request->post('id');
         $topics = Topic::findMany($ids);
+        $user = $request->attributes->get('user');
         if (!$topics) {
             return formatResponse('选题不存在～～');
         }
-        $failed_delete = '';
+        $failed_delete_student = $failed_delete_teacher = '';
         $success_delete = 0;
         $failed_delete_id = [];
         foreach ($topics as $topic) {
-            if ($topic->student) {
-                $failed_delete .= $topic->name . ' ';
+            if ($topic->teacher_id != $user->id) {
+                $failed_delete_teacher .= $topic->name . ' ';
+                continue;
+            } else if ($topic->student) {
+                $failed_delete_student .= $topic->name . ' ';
                 $failed_delete_id[] = $topic->id;
+                continue;
             } else {
                 $success_delete += 1;
                 $topic->delete();
             }
         }
         $response_msg = $success_delete ? '删除成功～～' : '删除失败～～';
-        $response_msg .= $failed_delete ? $failed_delete . '已被学生选中，无法删除' : '';
+        $response_msg .= "<br>";
+        if ($failed_delete_teacher) {
+            $response_msg .= $failed_delete_teacher . '不是您的选题，无法删除' . "<br>";
+        }
+        if ($failed_delete_student) {
+            $response_msg .= $failed_delete_student . '已被学生选中，无法删除' . "<br>";
+        }
 
         $res = mb_substr($response_msg, 0, 4, 'UTF-8');
         return formatResponse($response_msg, $failed_delete_id, $res == '删除成功' ? 1 : 0);

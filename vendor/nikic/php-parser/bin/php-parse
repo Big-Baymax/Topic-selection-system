@@ -121,7 +121,7 @@ Operations is a list of the following options (--dump by default):
     -N, --resolve-names     Resolve names using NodeVisitor\NameResolver
     -c, --with-column-info  Show column-numbers for errors (if available)
     -P, --with-positions    Show positions in node dumps
-    -r, --with-recovery     Use parsing with error recovery
+    -r, --with-recovery     Use parsing with errors recovery
     -h, --help              Display this page
 
 Example:

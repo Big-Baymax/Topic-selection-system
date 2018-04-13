@@ -2027,7 +2027,7 @@
                 if (!silent) that.$tableLoading.hide();
             },
             error: function (res) {
-                that.trigger('load-error', res.status, res);
+                that.trigger('load-errors', res.status, res);
                 if (!silent) that.$tableLoading.hide();
             }
         });
@@ -2106,7 +2106,7 @@
 
     BootstrapTable.prototype.resetHeader = function () {
         // fix #61: the hidden table reset header bug.
-        // fix bug: get $el.css('width') error sometime (height = 500)
+        // fix bug: get $el.css('width') errors sometime (height = 500)
         clearTimeout(this.timeoutId_);
         this.timeoutId_ = setTimeout($.proxy(this.fitHeader, this), this.$el.is(':hidden') ? 100 : 0);
     };

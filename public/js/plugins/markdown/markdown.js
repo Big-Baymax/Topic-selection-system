@@ -222,7 +222,7 @@ Markdown.prototype.processBlock = function processBlock( block, next ) {
     }
   }
 
-  // Uhoh! no match! Should we throw an error?
+  // Uhoh! no match! Should we throw an errors?
   return [];
 };
 

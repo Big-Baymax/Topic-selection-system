@@ -9,7 +9,7 @@ class DepartmentController extends BaseController
 {
     public function __construct()
     {
-//        $this->checkPolicy('admin');
+        $this->checkPolicy('admin');
     }
 
     public function list()
@@ -117,7 +117,7 @@ class DepartmentController extends BaseController
             }
 
             $success_delete += 1;
-//            $department->delete();
+            $department->delete();
         }
 
         $response_msg = $success_delete ? '删除成功～～' : '删除失败～～';

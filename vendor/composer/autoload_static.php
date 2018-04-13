@@ -363,6 +363,7 @@ class ComposerStaticInitb77e4dc30c2c1515bf36551843780dba
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\Admin\\AdministratorController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/AdministratorController.php',
         'App\\Http\\Controllers\\Admin\\BaseController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/BaseController.php',
+        'App\\Http\\Controllers\\Admin\\DepartmentController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/DepartmentController.php',
         'App\\Http\\Controllers\\Admin\\ExcelController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/ExcelController.php',
         'App\\Http\\Controllers\\Admin\\ImportErrorLogController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/ImportErrorLogController.php',
         'App\\Http\\Controllers\\Admin\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/Admin/LoginController.php',

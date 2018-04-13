@@ -59,17 +59,8 @@ Route::group(['middleware' => 'checkAdminLogin'], function () {
     Route::post('/excel/import', 'ExcelController@import');
     Route::get('/excel/export', 'ExcelController@export');
     Route::post('/excel/import/logs/manage', 'ImportErrorLogController@manage');
-});
 
-Route::get('test', function () {
-    return view('admin/test');
-});
-
-
-Route::get('/setting/time', function () {
-    return view('admin/setting/time');
-});
-
-Route::get('/index_con', function () {
-    return view('admin/index_con');
+//    系统设置
+    Route::match(['get', 'post'], '/setting/time', 'SettingController@timeSet');
+    Route::match(['get', 'post'], '/setting/topic', 'SettingController@quantitySet');
 });
