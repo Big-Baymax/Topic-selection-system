@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\StudentTopicLogs;
 use App\Models\Topic;
 use App\Models\TopicCategory;
 use Illuminate\Http\Request;
@@ -186,13 +187,20 @@ class TopicController extends BaseController
         if (!$topic) {
             return formatResponse('没有该选题～～');
         }
+        $student_topic_log = StudentTopicLogs::where('topic_id', $id)
+                ->where('student_id', $topic->student_id)
+                ->orderBy('create_at', 'desc')
+                ->first();
         if ($act == 'pass') {
             $topic->status = 3;
+            $student_topic_log->status = 2;
         } else {
             $topic->student_id = 0;
             $topic->status = 1;
+            $student_topic_log->status = 3;
         }
         $topic->save();
+        $student_topic_log->save();
 
         return formatResponse('操作成功～～', [], 1);
     }

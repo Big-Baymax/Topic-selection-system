@@ -13,6 +13,17 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::post('/login', 'LoginController@login');
+Route::group(['middleware' => ['cors', 'checkAppLogin']], function () {
+//    选题
+    Route::get('topics', 'TopicController@index');
+    Route::get('topics/{id}', 'TopicController@show');
+    Route::post('topics/select', 'TopicController@select');
+//    学生
+    Route::get('students/{id}', 'StudentController@show');
+    Route::put('students/password', 'StudentController@editPassword');
+//    选题记录
+    Route::get('topicsRecords', 'StudentTopicLogController@index');
 });
+
+

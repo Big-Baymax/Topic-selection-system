@@ -8,6 +8,11 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 class Handler extends ExceptionHandler
 {
     /**
+     * http状态码
+     * @var int
+     */
+    public $httpCode = 500;
+    /**
      * A list of the exception types that are not reported.
      *
      * @var array
@@ -48,6 +53,13 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        return parent::render($request, $exception);
+        if (env('APP_DEBUG') === true) {
+            return parent::render($request, $exception);
+        }
+        if ($exception instanceof ApiException) {
+            $this->httpCode = $exception->httpCode;
+        }
+
+        return  show(0, $exception->getMessage(), [], $this->httpCode);
     }
 }

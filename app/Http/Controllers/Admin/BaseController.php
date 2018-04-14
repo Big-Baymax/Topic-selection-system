@@ -71,7 +71,9 @@ class BaseController extends Controller
     protected function getSettingQuantity()
     {
         $setting = DB::table('setting')->first();
-
+        if (!$setting) {
+            return config('common.default_topic_quantity');
+        }
         return $setting->quantity;
     }
 }
