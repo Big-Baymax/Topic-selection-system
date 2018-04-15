@@ -63,7 +63,6 @@ class TeacherController extends BaseController
             'teacherNo' => 'required|max:32|unique:teachers',
             'name' => 'required|max:20',
             'sex' => 'required',
-            'password' => 'required',
             'department_id' => 'required'
         ], [
             'teacherNo.required' => '请输入教师工号～～',
@@ -71,7 +70,6 @@ class TeacherController extends BaseController
             'teacherNo.unique' => '请输入符合规范的教师工号～～',
             'name.*' => '请输入符合规范的姓名～～',
             'sex.required' => '请选择性别～～',
-            'password.required' => '请输入登录密码～～',
             'department_id.required' => '请选择系别～～'
         ]);
         if ($validateData) {
@@ -83,10 +81,10 @@ class TeacherController extends BaseController
         $teacher->name = $input['name'];
         $teacher->department_id = $input['department_id'];
         $teacher->salt = makeSalt();
-        $teacher->password = md5($input['password'] . md5($teacher->salt));
+        $teacher->password = md5(123456 . md5($teacher->salt));
         $teacher->save();
 
-        return formatResponse('操作成功～～', [], 1);
+        return formatResponse('操作成功～～默认密码为123456', [], 1);
     }
 
     public function update(Request $request, $id)
