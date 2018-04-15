@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             'mobile' => '13328942695',
             'login_name' => 'admin',
             'password' => '9e220fd633e62b119615e0bdcaf01d8b',
+            'is_admin' => 1,
             'salt' => 'oZbzvJ+chEdaU(SE'
         ]);
     }
