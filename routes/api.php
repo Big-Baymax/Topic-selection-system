@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 */
 
 Route::post('/login', 'LoginController@login');
-Route::group(['middleware' => ['cors', 'checkAppLogin']], function () {
+Route::group(['middleware' => 'checkAppLogin'], function () {
 //    选题
     Route::get('topics', 'TopicController@index');
     Route::get('topics/{id}', 'TopicController@show');
