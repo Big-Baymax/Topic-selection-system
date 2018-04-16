@@ -23,6 +23,12 @@ class TopicController extends Controller
         if ($page['page_index'] <= 0) {
             $page['page_index'] = 1;
         }
+
+        $page_size = config('common.page_size');
+        $query->where('status', 1);
+
+        $teacher_ids = array_unique($query->pluck('teacher_id')->toArray());
+        $category_ids = array_unique($query->pluck('category_id')->toArray());
         if (!empty($input['search_text'])) {
             $query->where('name', $input['search_text']);
         }
@@ -32,14 +38,9 @@ class TopicController extends Controller
         if (!empty($input['topic_category']) && $input['topic_category']) {
             $query->whereIn('category_id', $input['topic_category']);
         }
-        $page_size = config('common.page_size');
         $total_count = $query->count();
         $page['page_count'] = ceil($total_count / $page_size);
-
-        $teacher_ids = array_unique($query->pluck('teacher_id')->toArray());
-        $category_ids = array_unique($query->pluck('category_id')->toArray());
         $query->select(['id', 'name', 'description', 'teacher_id', 'created_at', 'category_id'])
-                ->where('status', 1)
                 ->orderBy('created_at', $order)
                 ->offset(($page['page_index'] - 1) * $page_size)
                 ->take($page_size);
