@@ -33,14 +33,14 @@ class CheckAppLogin
         if (empty($access_token)) {
             return false;
         }
-        $access_token = AesService::opensslDecrypt($access_token);
+//        $access_token = AesService::opensslDecrypt($access_token);
 
         if (empty($access_token)) {
             return false;
         }
-        list($token, $id) = explode('||', $access_token);
-        $student = Student::where('token', $token)
-                ->where('id', $id)
+//        list($token, $id) = explode('||', $access_token);
+        $student = Student::where('token', $access_token)
+//                ->where('id', $id)
                 ->first();
         if (!$student || !$student->status) {
             return false;

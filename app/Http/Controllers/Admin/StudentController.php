@@ -79,7 +79,9 @@ class StudentController extends BaseController
         $input = $request->post();
         $student->stuNo = $input['stuNo'];
         $student->name = $input['name'];
+        $student->sex = $input['sex'];
         $student->salt = makeSalt();
+        $student->department_id = $input['department_id'];
         $student->password = md5(123456 . md5($student->salt));
         $student->save();
 

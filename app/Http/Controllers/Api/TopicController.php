@@ -36,13 +36,14 @@ class TopicController extends Controller
         $total_count = $query->count();
         $page['page_count'] = ceil($total_count / $page_size);
 
+        $teacher_ids = array_unique($query->pluck('teacher_id')->toArray());
+        $category_ids = array_unique($query->pluck('category_id')->toArray());
         $query->select(['id', 'name', 'description', 'teacher_id', 'created_at', 'category_id'])
                 ->where('status', 1)
                 ->orderBy('created_at', $order)
                 ->offset(($page['page_index'] - 1) * $page_size)
                 ->take($page_size);
-        $teacher_ids = array_unique($query->pluck('teacher_id')->toArray());
-        $category_ids = array_unique($query->pluck('category_id')->toArray());
+
         $topics = $query->get();
         $page['page_quantity'] = $topics->count();
         $student = $request->attributes->get('student');

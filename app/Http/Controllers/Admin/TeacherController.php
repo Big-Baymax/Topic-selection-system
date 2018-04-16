@@ -77,7 +77,8 @@ class TeacherController extends BaseController
         }
         $teacher = new Teacher();
         $input = $request->post();
-        $teacher->teacherNo = $input['teacher'];
+        $teacher->teacherNo = $input['teacherNo'];
+        $teacher->sex = $input['sex'];
         $teacher->name = $input['name'];
         $teacher->department_id = $input['department_id'];
         $teacher->salt = makeSalt();

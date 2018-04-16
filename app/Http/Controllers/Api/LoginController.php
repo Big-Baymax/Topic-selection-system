@@ -22,7 +22,6 @@ class LoginController extends Controller
         if (empty($input['password'])) {
             return show(0, '密码不能为空～～', [], 404);
         }
-        $token = IAuth::setAppLoginToken($input['stuNo']);
         $student = Student::where('stuNo', $input['stuNo'])->first();
         if (!$student || !$student->status) {
             return show(0, '学号不存在或已被禁用～～', [], 403);
@@ -31,11 +30,13 @@ class LoginController extends Controller
         if ($tmp_password != $student->password) {
             return show(0, '密码错误～～', [], 403);
         }
+        $token = IAuth::setAppLoginToken($input['stuNo']);
         $student->token = $token;
         $student->expired_at = strtotime("+" . config('common.app_login_time_out_day') . " days");
         if ($student->save()) {
             $res = [
-                'token' => AesService::opensslEncrypt($token . '||' . $student->id)
+//                'token' => AesService::opensslEncrypt($token . '||' . $student->id),
+                'student' => $student
             ];
             return show(1, '登录成功～～', $res);
         } else {
