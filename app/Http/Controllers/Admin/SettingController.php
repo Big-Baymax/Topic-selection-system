@@ -37,10 +37,17 @@ class SettingController extends BaseController
             if (strtotime($begin_time) >= strtotime($end_time)) {
                 return formatResponse('开始时间不能大于结束时间～～');
             }
-            DB::table('setting')->update([
-                'begin_time' => $begin_time,
-                'end_time' => $end_time
-            ]);
+            if (!$setting) {
+                DB::table('setting')->insert([
+                    'begin_time' => $begin_time,
+                    'end_time' => $end_time
+                ]);
+            } else {
+                DB::table('setting')->update([
+                    'begin_time' => $begin_time,
+                    'end_time' => $end_time
+                ]);
+            }
         }
 
 
@@ -61,7 +68,11 @@ class SettingController extends BaseController
         if (!is_numeric($quantity) || $quantity <= 0) {
             return formatResponse('请输入符合规范的教师选题限定数量～～');
         }
-        DB::table('setting')->update(['quantity' => $quantity]);
+        if (!$setting) {
+            DB::table('setting')->insert(['quantity' => $quantity]);
+        } else {
+            DB::table('setting')->update(['quantity' => $quantity]);
+        }
 
         return formatResponse('操作成功～～', [], 1);
     }
