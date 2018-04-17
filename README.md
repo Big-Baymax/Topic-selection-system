@@ -1,5 +1,5 @@
 # Topic-selection-system
-学生选题系统
+毕业设计选题管理系统
 
 ## 项目环境
 1. 运行环境   
