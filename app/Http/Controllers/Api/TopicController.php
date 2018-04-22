@@ -67,20 +67,20 @@ class TopicController extends Controller
 
     public function show($id)
     {
-        $topic = Topic::with('category')
-                ->select(['id', 'name', 'description', 'created_at', 'category_id'])
+        $topic = Topic::with(['category', 'teacher'])
+                ->select(['id', 'name', 'description', 'created_at', 'category_id', 'teacher_id'])
                 ->find($id)
                 ->toArray();
         if (!$topic) {
             return show(0, '该课题不存在～～', [], 404);
         }
-
         return show(1, '请求成功～～', [
             'id' => $topic['id'],
             'name' => $topic['name'],
             'description' => $topic['description'],
             'created_at' => $topic['created_at'],
-            'category' => $topic['category']['name']
+            'category' => $topic['category']['name'],
+            'teacher' => $topic['teacher']['name']
         ]);
     }
 
@@ -95,6 +95,10 @@ class TopicController extends Controller
             return show(0, '未知的选题~~', [], 404);
         }
         $topic = Topic::find($topic_id);
+        $has_selected = Topic::where('student_id', $student_id)->get();
+        if ($has_selected->isNotEmpty()) {
+            return show(0, '你已经选过题了～～', [], 400);
+        }
         if (!$topic) {
             return show(0, '该选题不存在~~', [], 404);
         }
@@ -121,5 +125,10 @@ class TopicController extends Controller
         }
 
         return show(1, '选题成功~~', [], 201);
+    }
+
+    public function selectCancel()
+    {
+
     }
 }

@@ -204,4 +204,35 @@ class TopicController extends BaseController
 
         return formatResponse('操作成功～～', [], 1);
     }
+
+    public function reset(Request $request)
+    {
+        $id = $request->post('id', '');
+        $act = $request->post('act', '');
+        if (!$id) {
+            return formatResponse('请选择要操作的选题～～');
+        }
+        if (!in_array($act, ['pass', 'fail'])) {
+            return formatResponse('未知的操作～～');
+        }
+        $topic = Topic::find($id);
+        if (!$topic) {
+            return formatResponse('没有该选题～～');
+        }
+        $student_topic_log = StudentTopicLogs::where('topic_id', $id)
+            ->where('student_id', $topic->student_id)
+            ->orderBy('create_at', 'desc')
+            ->first();
+        if ($act == 'pass') {
+            $topic->status = 1;
+            $topic->student_id = 0;
+            $student_topic_log->status = 5;
+        } else {
+            $student_topic_log->status = 2;
+        }
+        $topic->save();
+        $student_topic_log->save();
+
+        return formatResponse('操作成功～～', [], 1);
+    }
 }

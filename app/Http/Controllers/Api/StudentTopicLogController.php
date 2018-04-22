@@ -26,6 +26,7 @@ class StudentTopicLogController extends Controller
             $data[$key]['topic'] = $log['topic']['name'];
             $data[$key]['created_at'] = $log['create_at'];
             $data[$key]['status'] = $student_topic_status[$log['status']];
+            $data[$key]['topic_id'] = $log['topic_id'];
         }
 
         return show(1, '请求成功~~', $data);

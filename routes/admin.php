@@ -48,6 +48,7 @@ Route::group(['middleware' => 'checkAdminLogin'], function () {
     Route::resource('/topics', 'TopicController')->except(['create', 'edit', 'destroy']);
     Route::post('/topics/delete', 'TopicController@delete');
     Route::post('/topics/ops', 'TopicController@ops');
+    Route::post('/topics/reset', 'TopicController@reset');
 
 //    系别管理
     Route::get('/departments/index', 'DepartmentController@list');
