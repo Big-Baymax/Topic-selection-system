@@ -24,6 +24,7 @@ Route::group(['middleware' => 'checkAppLogin'], function () {
     Route::put('students/password', 'StudentController@editPassword');
 //    选题记录
     Route::get('topicsRecords', 'StudentTopicLogController@index');
+    Route::put('topicsRecords/reset', 'StudentTopicLogController@resetApply');
 });
 
 
