@@ -145,7 +145,7 @@ class TopicController extends BaseController
             return formatResponse('选题不存在～～');
         }
         $failed_delete_student = $failed_delete_teacher = '';
-        $success_delete = 0;
+        $delete_ids = [];
         $failed_delete_id = [];
         foreach ($topics as $topic) {
             if ($topic->teacher_id != $user->id) {
@@ -156,11 +156,14 @@ class TopicController extends BaseController
                 $failed_delete_id[] = $topic->id;
                 continue;
             } else {
-                $success_delete += 1;
+                $delete_ids[] = $topic->id;
                 $topic->delete();
             }
         }
-        $response_msg = $success_delete ? '删除成功～～' : '删除失败～～';
+        if ($delete_ids) {
+            StudentTopicLogs::whereIn('topic_id', $delete_ids)->delete();
+        }
+        $response_msg = $delete_ids ? '删除成功～～' : '删除失败～～';
         $response_msg .= "<br>";
         if ($failed_delete_teacher) {
             $response_msg .= $failed_delete_teacher . '不是您的选题，无法删除' . "<br>";

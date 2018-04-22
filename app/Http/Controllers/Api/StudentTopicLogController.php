@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\StudentTopicLogs;
+use App\Models\Topic;
 use Illuminate\Http\Request;
 
 class StudentTopicLogController extends Controller
@@ -43,8 +44,10 @@ class StudentTopicLogController extends Controller
         if (!$log) {
             return show(0, '没有该记录~~', [], 404);
         }
+        $topic = Topic::where('topic_id', $log->topic_id)->first();
+        $topic->status = 4;
         $log->status = 4;
-        if ($log->save()) {
+        if ($topic->save() && $log->save()) {
             return show(1, '申请成功～～', [], 202);
         }
 
