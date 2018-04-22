@@ -21,10 +21,10 @@ Route::group(['middleware' => 'checkAppLogin'], function () {
     Route::post('topics/select', 'TopicController@select');
 //    学生
     Route::get('students/{id}', 'StudentController@show');
-    Route::put('students/password', 'StudentController@editPassword');
+    Route::post('students/password', 'StudentController@editPassword');
 //    选题记录
     Route::get('topicsRecords', 'StudentTopicLogController@index');
-    Route::put('topicsRecords/reset', 'StudentTopicLogController@resetApply');
+    Route::post('topicsRecords/reset', 'StudentTopicLogController@resetApply');
 });
 
 
