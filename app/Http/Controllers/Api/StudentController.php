@@ -57,4 +57,21 @@ class StudentController extends Controller
         }
         return show(0, '修改失败', [], 500);
     }
+
+    public function logout(Request $request)
+    {
+        $id = $request->post('id');
+        if (!$id) {
+            return show(0, '未知的学生～～', [], 404);
+        }
+        $student = Student::find($id);
+        if (!$student) {
+            return show(0, '该学生不存在～～', [], 404);
+        }
+        $student->expired_at = time();
+        if ($student->save()) {
+            return show(1, '注销成功~~', [], 202);
+        }
+        return show(0, '注销失败~~', [], 500);
+    }
 }
