@@ -25,6 +25,7 @@ Route::group(['middleware' => 'checkAppLogin'], function () {
 //    选题记录
     Route::get('topicsRecords', 'StudentTopicLogController@index');
     Route::post('topicsRecords/reset', 'StudentTopicLogController@resetApply');
+    Route::post('topicsRecords/cancel', 'StudentTopicLogController@cancel');
 });
 
 

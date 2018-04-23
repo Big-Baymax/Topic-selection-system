@@ -44,7 +44,11 @@ class StudentTopicLogController extends Controller
         if (!$log) {
             return show(0, '没有该记录~~', [], 404);
         }
-        $topic = Topic::where('id', $log->topic_id)->first();
+        if ($log->status != 2) {
+            return show(0, '只有审核通过的记录才可申请重选～～', [] , 404);
+        }
+
+        $topic = Topic::find($log->topic_id);
         $topic->status = 4;
         $log->status = 4;
         if ($topic->save() && $log->save()) {
@@ -52,5 +56,29 @@ class StudentTopicLogController extends Controller
         }
 
         return show(0, '申请失败~~', [], 404);
+    }
+
+    public function cancel(Request $request)
+    {
+        $id = $request->post('id');
+        if (!$id) {
+            return show(0, '未知的选题记录~~', [], 404);
+        }
+        $log = StudentTopicLogs::find($id);
+        if (!$log) {
+            return show(0, '该选题记录不存在～～', [], 404);
+        }
+        if ($log->status != 1) {
+            return show(0, '只有审核中的记录才可取消重选～～', [] , 404);
+        }
+        $log->status = 6;
+        $topic = Topic::find($log->topic_id);
+        $topic->status = 1;
+        $topic->student_id = 0;
+        if ($log->save() && $topic->save()) {
+            return show(1, '取消成功～～', [], 202);
+        }
+
+        return show(0, '取消失败～～', [], 500);
     }
 }
