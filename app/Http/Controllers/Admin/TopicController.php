@@ -231,6 +231,7 @@ class TopicController extends BaseController
             $topic->student_id = 0;
             $student_topic_log->status = 5;
         } else {
+            $topic->status = 3;
             $student_topic_log->status = 2;
         }
         $topic->save();
