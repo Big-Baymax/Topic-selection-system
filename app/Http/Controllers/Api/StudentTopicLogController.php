@@ -44,7 +44,7 @@ class StudentTopicLogController extends Controller
         if (!$log) {
             return show(0, '没有该记录~~', [], 404);
         }
-        $topic = Topic::where('topic_id', $log->topic_id)->first();
+        $topic = Topic::where('id', $log->topic_id)->first();
         $topic->status = 4;
         $log->status = 4;
         if ($topic->save() && $log->save()) {
