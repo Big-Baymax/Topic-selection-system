@@ -16,7 +16,9 @@ class StudentTopicLogController extends Controller
             return show(0, '未知的学生~~', [], 404);
         }
         $student_topic_logs = StudentTopicLogs::where('student_id', $student_id)
-                ->with(['teacher', 'topic'])
+                ->with(['teacher' => function ($query) {
+                    return $query->with('category');
+                }, 'topic'])
                 ->get()
                 ->toArray();
 

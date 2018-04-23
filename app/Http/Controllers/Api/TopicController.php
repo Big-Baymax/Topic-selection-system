@@ -108,7 +108,7 @@ class TopicController extends Controller
         try {
             DB::beginTransaction();
             $topic->student_id = $student_id;
-            $topic->status = 1;
+            $topic->status = 2;
             $topic->save();
             $student_topic_log = new StudentTopicLogs();
             $student_topic_log->insert([
@@ -125,10 +125,5 @@ class TopicController extends Controller
         }
 
         return show(1, '选题成功~~', [], 201);
-    }
-
-    public function selectCancel()
-    {
-
     }
 }
