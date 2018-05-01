@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="icon" href="img/logo.png" type="image/x-icon" />
+		<script src="js/mui.js"></script>
+		<script src="js/jquery-2.1.0.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/app.css" rel="stylesheet" />
+
+		<style>
+			.index-img {
+				width: 100%;
+				text-align: center;
+				border: 1px black inset;
+				margin: 10px 0px;
+			}
+			
+			.select-topic {
+				position: absolute;
+				top: 124px;
+				right: 0;
+				bottom: 44px;
+				left: 0;
+				z-index: 1;
+			}
+			
+			.search-topic {
+				padding: 0px 10px;
+				position: absolute;
+				height: 50px;
+				top: -70px;
+				width: 100%;
+			}
+			
+			.mui-card-header {
+				height: 60px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav header">
+			<a class="mui-icon mui-icon-help mui-pull-left" href="#topPopover"></a>
+			<h1 class="mui-title">毕业设计选题管理系统</h1>
+			<a class="mui-icon mui-icon-loop mui-pull-right" onclick="location.href=location.href;"></a>
+		</header>
+		<!--<header class="mui-bar mui-bar-nav header ">
+			<div class="mui-input-row mui-search">
+				<input type="search" class="mui-input-clear" placeholder="">
+			</div>
+		</header>-->
+		<nav class="mui-bar mui-bar-tab">
+			<a class="mui-tab-item mui-active" href="#tabbar">
+				<span class="mui-icon mui-icon-home"></span>
+				<span class="mui-tab-label">首页</span>
+			</a>
+			<a class="mui-tab-item" href="#tabbar-with-chat" id="topic-hall">
+				<span class="mui-icon mui-icon-search">
+					<!--<span class="mui-badge">9</span>-->
+				</span>
+				<span class="mui-tab-label">选题大厅</span>
+			</a>
+			<a class="mui-tab-item" href="#tabbar-with-contact" id="topic-log">
+				<span class="mui-icon mui-icon-compose"></span>
+				<span class="mui-tab-label">选择记录</span>
+			</a>
+			<a class="mui-tab-item" href="#tabbar-with-map">
+				<span class="mui-icon mui-icon-gear"></span>
+				<span class="mui-tab-label">设置</span>
+			</a>
+		</nav>
+		<div class="mui-content">
+			<!--第一个子页面-->
+			<div id="tabbar" class="mui-control-content mui-active">
+				<div class="title" style="font-size: 23px;">毕业设计选题管理系统使用介绍</div>
+				<div class="title">
+					随着Internet的飞速发展及互联网的普及，计算机已广泛用于政府、军事、科研、商业等部门，连接到千家万户，利用计算机实现毕业设计管理势在必行。 目前高校基本都采用网站的形式管理学生的毕业设计。 本系统主要分为三个模块：学生模块、教师模块和管理员模块。
+				</div>
+				<div class="title" style="font-size: 23px;">学生用户操做</div>
+				<div class="title">
+					1、首先到选题大厅找寻想要选择的课题，这边可以根据关键词，教师，课题类型等来过滤课题：
+					<img src="img/img1.png" class="index-img"> 2、点击进入详情，可以查看详细的信息，并且可以选择想要选的课题：
+					<img src="img/img2.png" class="index-img"> 3、选择后可以到选择记录哪边查看你选择状态，再教师未审核前可以取消选题，到此就选择完成了：
+					<img src="img/img3.png" class="index-img">
+				</div>
+			</div>
+
+			<!--第二个子页面-->
+			<div id="tabbar-with-chat" class="mui-control-content select-topic">
+				<div class="search mui-row search-topic">
+					<div class="mui-col-xs-9 mui-input-row mui-search">
+						<input id="search_text" type="search" class="mui-input-clear" placeholder="输入关键字">
+					</div>
+					<div class="mui-col-xs-3" style="text-align: center;">
+						<button type="button" id="search" data-loading-text="请稍等" class="mui-btn mui-btn-lan mui-btn-outlined" style="border-radius: 60px;"><span class="mui-icon mui-icon-search" style="font-size: 16px;"></span>搜索</button>
+					</div>
+
+					<!--<a class="mui-icon mui-icon-search mui-pull-right" id="title"></a>-->
+				</div>
+				<div class="mui-row filter">
+					<div class="mui-col-xs-5 filter-btn" id="teacher-btn">指导老师<span class="mui-icon mui-icon-arrowdown"></span></div>
+					<div class="mui-col-xs-5 filter-btn" id="class-btn">课题类型<span class="mui-icon mui-icon-arrowdown"></span></div>
+					<div class="mui-col-xs-2 filter-btn" id="sort-menu" style="color: #5afaf4;">排序<span class="mui-icon mui-icon-arrowdown"></span></div>
+				</div>
+				<div class="mui-slider-group">
+					<div id="scroll1" class="mui-scroll-wrapper">
+						<div class="mui-scroll">
+							<div class="topic" id="topic">
+
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+			<!--第三个子页面-->
+			<div id="tabbar-with-contact" class="mui-control-content">
+
+				<div class="mui-card-content" id="select-card">
+
+				</div>
+
+			</div>
+			<!--第四个子页面-->
+			<div id="tabbar-with-map" class="mui-control-content">
+				<div class="title"></div>
+				<ul class="mui-table-view">
+					<li class="mui-table-view-cell" id="my-info">
+						<a class="mui-navigate-right">
+							我的信息
+						</a>
+					</li>
+					<!--<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							隐私
+						</a>
+					</li>
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right">
+							通用
+						</a>
+					</li>-->
+				</ul>
+				<ul class="mui-table-view" style="margin-top: 25px;">
+					<li class="mui-table-view-cell">
+						<a class="mui-navigate-right" id="about">
+							关于我们
+						</a>
+					</li>
+				</ul>
+				<ul class="mui-table-view" style="margin-top: 25px;">
+					<li class="mui-table-view-cell" id="login">
+						<a style="text-align: center;color: #FF3B30;">
+							注销用户
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+
+		<!--右上角弹出菜单-->
+		<div id="topPopover" class="mui-popover" style="width: 150px;height:100px">
+			<div class="mui-popover-arrow"></div>
+			<div class="mui-scroll-wrapper">
+				<div class="mui-scroll">
+					<ul class="mui-table-view">
+						<li class="mui-table-view-cell">
+							<a href="#" id="cpwd">
+								<span class="mui-icon mui-icon-locked popover-icon"></span> 修改密码
+							</a>
+						</li>
+						<li class="mui-table-view-cell" id="layout">
+							<a href="#">
+								<span class="mui-icon mui-icon-redo popover-icon"></span> 注销
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+		</div>
+
+		<div id="class-wrapper" class="menu-wrapper hidden">
+			<div id="class" class="menu mui-row">
+				<form id="class-form">
+					<ul class="mui-row mui-table-view mui-table-view-checkbox">
+
+						<div class="mui-col-xs-12" style="padding: 20px 0px;text-align: center;">
+							<button type="button" class=" mui-btn mui-btn-primary mui-col-xs-4" id="confirm">确定</button>
+							<button type="button" class=" mui-btn mui-btn-success mui-col-xs-4" id="cancel">取消</button>
+						</div>
+					</ul>
+				</form>
+			</div>
+		</div>
+
+		<div id="teacher-wrapper" class="menu-wrapper hidden">
+			<div id="teacher" class="menu mui-row">
+				<form id="teacher-form">
+					<ul class="mui-row mui-table-view mui-table-view-checkbox">
+
+						<div class="mui-col-xs-12" style="padding: 20px 0px;text-align: center;">
+							<button type="button" class=" mui-btn mui-btn-primary mui-col-xs-4" id="confirm">确定</button>
+							<button type="button" class=" mui-btn mui-btn-success mui-col-xs-4" id="cancel">取消</button>
+						</div>
+					</ul>
+				</form>
+			</div>
+		</div>
+
+		<div id="sort-wrapper" class="menu-wrapper hidden">
+			<div id="sort" class="menu mui-row">
+				<form id="sort-form">
+					<ul class="mui-row mui-table-view mui-table-view-radio">
+						<li class="mui-col-sm-12 mui-col-xs-12 mui-table-view-cell">
+							<a class="mui-navigate-right">
+								根据时间顺序
+								<input type="radio" value="asc" name="sort" style="display: none;">
+							</a>
+						</li>
+						<li class="mui-col-xs-12 mui-table-view-cell">
+							<a class="mui-navigate-right">
+								根据时间倒序
+								<input type="radio" value="desc" name="sort" style="display: none;">
+							</a>
+						</li>
+
+						<div class="mui-col-xs-12" style="padding: 20px 0px;text-align: center;">
+							<button type="button" class=" mui-btn mui-btn-primary mui-col-xs-4" id="confirm">确定</button>
+							<button type="button" class=" mui-btn mui-btn-success mui-col-xs-4" id="cancel">取消</button>
+						</div>
+					</ul>
+				</form>
+			</div>
+		</div>
+
+		<div id="menu-backdrop" class="menu-backdrop"></div>
+	</body>
+	<script src="js/mui.pullToRefresh.js"></script>
+	<script src="js/mui.pullToRefresh.material.js"></script>
+
+	<script>
+		//localStorage.clear();
+		mui.plusReady(function() {
+			//关闭事件  
+			var first = null;
+                var oldback = mui.back;
+                mui.back = function() {
+                    if(!first) {
+                        first = new Date().getTime();
+                        console.log(first);
+                        mui.toast('再按一次退出应用');
+                        setTimeout(function() {
+                            first = null;
+                        }, 2000);
+                    } else {
+                        if(new Date().getTime() - first < 2000) {
+                            plus.runtime.quit();
+                        }
+                    }
+                };
+		})
+		var tok = localStorage.getItem("token");
+		if(!tok) {
+			var opennew = mui.openWindow({
+				url: 'login.html',
+				extras: {}
+			});
+		}
+	</script>
+	<script type="text/javascript" src="js/app.js"></script>
+
+	<script>
+		mui.init({
+			swipeBack: true //启用右滑关闭功能
+		});
+
+		var classWrapper = document.getElementById("class-wrapper");
+		var sortWrapper = document.getElementById("sort-wrapper");
+		var teacherWrapper = document.getElementById("teacher-wrapper");
+		var classm = document.getElementById("class");
+		var sort = document.getElementById("sort");
+		var teacher = document.getElementById("teacher");
+		var jquery = $;
+		var info = JSON.parse(localStorage.getItem("info"));
+
+		(function($) {
+
+			//阻尼系数
+			var deceleration = mui.os.ios ? 0.003 : 0.0009;
+			$('.mui-scroll-wrapper').scroll({
+				bounce: false,
+				indicators: true, //是否显示滚动条
+				deceleration: deceleration
+			});
+
+			$.ready(function() {
+				//循环初始化所有下拉刷新，上拉加载。
+				$.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
+					$(pullRefreshEl).pullToRefresh({
+						down: {
+							//auto: true,
+							callback: function() {
+								var self = this;
+								setTimeout(function() {
+									var ul = self.element.querySelector('.topic');
+									//ul.insertBefore(createFragment(ul, index, 10, true), ul.firstChild);
+									index = 1;
+									//self.endPullUpToRefresh(createFragment(ul, index,10));
+									console.log("下拉");
+									self.endPullDownToRefresh(createFragment(ul, index, true));
+								}, 800);
+							}
+						},
+						up: {
+							//auto: true,
+							callback: function() {
+								var self = this;
+								setTimeout(function() {
+									var ul = self.element.querySelector('.topic');
+									//ul.appendChild();
+									//index = 1;
+									console.log("上拉");
+									self.endPullUpToRefresh(createFragment(ul, ++index, false));
+								}, 300);
+							}
+						}
+					});
+				});
+			});
+		})(mui);
+
+		var downicon;
+		//注销 打开新页面
+		document.getElementById('login').addEventListener('tap', function() {
+			mui.ajax(root + 'students/logout', {
+				data: {
+					id: info.id,
+				},
+				headers: {
+					'accessToken': token()
+				},
+				dataType: 'json', //服务器返回json格式数据
+				type: 'post', //HTTP请求类型
+				async: false, //同步执行
+				timeout: 10000, //超时时间设置为10秒；
+				complete: function() {
+					mui(mui('#select_reelect')).button('reset');
+				},
+				beforeSend: function() {
+					mui(mui('#select_reelect')).button('loading');
+				},
+				error: function(xhr, type, errorThrown) {
+					//console.log(JSON.parse(xhr.response));
+					//异常处理；
+					try {
+						var response = JSON.parse(xhr.response);
+						mui.toast(response.message)
+					} catch(e) {
+						mui.toast('请检查网络是否通畅！');
+					}
+
+				},
+				success: function(data) {
+					mui.toast(data.message);
+					setTimeout(function() {
+						//localStorage.removeItem('token');
+						localStorage.clear();
+						openpage('login.html', {});
+					}, 1000);
+				}
+			});
+		});
+		document.getElementById('layout').addEventListener('tap', function() {
+			mui.ajax(root + 'students/logout', {
+				data: {
+					id: info.id,
+				},
+				headers: {
+					'accessToken': token()
+				},
+				dataType: 'json', //服务器返回json格式数据
+				type: 'post', //HTTP请求类型
+				async: false, //同步执行
+				timeout: 10000, //超时时间设置为10秒；
+				complete: function() {
+					mui(mui('#select_reelect')).button('reset');
+				},
+				beforeSend: function() {
+					mui(mui('#select_reelect')).button('loading');
+				},
+				error: function(xhr, type, errorThrown) {
+					//console.log(JSON.parse(xhr.response));
+					//异常处理；
+					try {
+						var response = JSON.parse(xhr.response);
+						mui.toast(response.message)
+					} catch(e) {
+						mui.toast('请检查网络是否通畅！');
+					}
+
+				},
+				success: function(data) {
+					mui.toast(data.message);
+					setTimeout(function() {
+						//localStorage.removeItem('token');
+						localStorage.clear();
+						openpage('login.html', {});
+					}, 1000);
+				}
+			});
+		});
+		document.getElementById('cpwd').addEventListener('tap', function() {
+			openpage('cpwd.html', {});
+		});
+
+		mui('.topic').on('tap', '.topic-card', function() {
+			var data = this.getAttribute("data_id");
+			localStorage.setItem("data_id", data);
+			var webview = mui.openWindow({
+				id: 'webviewId',
+				url: 'detail.html',
+				extras: {
+					id: data //扩展参数
+				}
+			});
+
+		});
+
+		mui('#select-card').on('tap', '.select-detail', function() {
+			//			mui(this).button('loading');
+			//			setTimeout(function(){
+			//				mui(this).button('reset');
+			//			},1000);
+			var data = this.getAttribute("data_id");
+			localStorage.setItem("data_id", data);
+			var webview = mui.openWindow({
+				id: 'webviewId',
+				url: 'detail.html',
+				extras: {
+					id: data //扩展参数
+				}
+			});
+
+		});
+
+		//搜索按钮
+		document.getElementById("search").addEventListener('tap', function() {
+			mui(mui('#search')).button('loading');
+			setTimeout(function() {
+				mui(mui('#search')).button('reset');
+			}, 1000)
+			createFragment(document.getElementById('topic'), 1, true)
+		});
+
+		document.getElementById("class-btn").addEventListener('tap', function() {
+			downicon = this.children[0];
+			downicon.className = 'mui-icon mui-icon-arrowup';
+			toggleMenu(classWrapper, classm)
+
+		});
+
+		document.getElementById("teacher-btn").addEventListener('tap', function() {
+			downicon = this.children[0];
+			downicon.className = 'mui-icon mui-icon-arrowup';
+			toggleMenu(teacherWrapper, teacher)
+
+		});
+		document.getElementById("sort-menu").addEventListener('tap', function() {
+			downicon = this.children[0];
+			downicon.className = 'mui-icon mui-icon-arrowup';
+			toggleMenu(sortWrapper, sort)
+
+		});
+
+		//设置页面
+		document.getElementById("about").addEventListener('tap', function() {
+			mui.alert("成员：王庆銮、陈旭桢、李世恩、陈鲜瑞、陈杨，开发时间：2018年4月25日", "组长：沈晓彬");
+
+		});
+		//我的信息弹窗
+		document.getElementById("my-info").addEventListener('tap', function() {
+			if(info.sex == 1) { info.sex = "男" } else { info.sex = "女" }
+			mui.alert("姓名：" + info.name + " | 性别：" + info.sex, "学号：" + info.stuNo);
+
+		});
+
+		//取消重选
+		mui('#select-card').on('tap', '#select_reelect', function() {
+			var data = this.getAttribute("data_id");
+			mui.ajax(root + 'topicsRecords/reset', {
+				data: {
+					id: data,
+				},
+				headers: {
+					'accessToken': token()
+				},
+				dataType: 'json', //服务器返回json格式数据
+				type: 'post', //HTTP请求类型
+				async: false, //同步执行
+				timeout: 10000, //超时时间设置为10秒；
+				complete: function() {
+					mui(mui('#select_reelect')).button('reset');
+				},
+				beforeSend: function() {
+					mui(mui('#select_reelect')).button('loading');
+				},
+				error: function(xhr, type, errorThrown) {
+					//console.log(JSON.parse(xhr.response));
+					//异常处理；
+					try {
+						var response = JSON.parse(xhr.response);
+						mui.toast(response.message)
+					} catch(e) {
+						mui.toast('请检查网络是否通畅！');
+					}
+
+				},
+				success: function(data) {
+					mui.toast(data.message);
+					setTimeout(function() {
+						location.href = location.href;
+					}, 1000);
+				}
+			});
+		});
+
+		//申请重选
+		mui('#select-card').on('tap', '#select_cancel', function() {
+			var data = this.getAttribute("data_id");
+			mui.ajax(root + 'topicsRecords/cancel', {
+				data: {
+					id: data,
+				},
+				headers: {
+					'accessToken': token()
+				},
+				dataType: 'json', //服务器返回json格式数据
+				type: 'post', //HTTP请求类型
+				async: false, //同步执行
+				timeout: 10000, //超时时间设置为10秒；
+				complete: function() {
+					mui(mui('#select_cancel')).button('reset');
+				},
+				beforeSend: function() {
+					mui(mui('#select_cancel')).button('loading');
+				},
+				error: function(xhr, type, errorThrown) {
+					//console.log(JSON.parse(xhr.response));
+					//异常处理；
+					try {
+						var response = JSON.parse(xhr.response);
+						mui.toast(response.message)
+					} catch(e) {
+						mui.toast('请检查网络是否通畅！');
+					}
+
+				},
+				success: function(data) {
+					mui.toast(data.message);
+					setTimeout(function() {
+						location.href = location.href;
+					}, 1000);
+				}
+			});
+		});
+
+		//点击选题大厅事件
+		document.getElementById("topic-hall").addEventListener("tap", function() {
+			addcheckbox(getlist(1).data.teachers, document.getElementById("teacher-form"));
+			addcheckbox(getlist(1).data.categories, document.getElementById("class-form"));
+			createFragment(document.getElementById('topic'), 1, true);
+		});
+
+		//点击选题记录事件
+		document.getElementById("topic-log").addEventListener("tap", function() {
+			showtopic(getselect_topic(info.id).data)
+		});
+	</script>
+
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta http-equiv="Access-Control-Allow-Origin" content="*">
+		<title></title>
+		<script src="js/jquery-2.1.0.js"></script>
+		<script src="js/mui.js"></script>
+	</head>
+	<body>
+	</body>
+	<script>
+		    var url ='http://localhost/api/login';
+		    
+		    var url_line = 'http://topic.wangyouquan.cc/api/login';
+		
+		    $.ajax({
+                url: url,
+                type: 'POST',
+                data: {
+                	stuNo: 's',
+					password: '123456',
+                },
+                beforeSend :function () {
+                     console.log("开始");
+                },
+                success: function (result) {
+                   console.log(result);
+                },
+                error: function () {
+                   console.log("失败");
+                }
+            });
+            
+            $.ajax({
+                url: url_line,
+                type: 'POST',
+                data: {
+                	stuNo: 's',
+					password: '123456',
+                },
+                beforeSend :function () {
+                     console.log("开始");
+                },
+                success: function (result) {
+                   console.log(result);
+                },
+                error: function () {
+                   console.log("失败");
+                }
+            });
+            
+            mui.ajax(url, {
+					data: {
+						stuNo: 's01',
+						password: '123456',
+					},
+					//headers: { 'Content-Type': 'application/json' },
+					//crossDomain:true,
+					dataType: 'jsonp', //服务器返回json格式数据
+					 jsonp: "jsoncallback",
+					type: 'post', //HTTP请求类型
+					async: false, //同步执行
+					timeout: 10000, //超时时间设置为10秒；
+					complete: function() {
+						mui(mui('#login')).button('reset');
+					},
+					beforeSend: function() {
+						mui(mui('#login')).button('loading');
+					},
+					error: function(xhr, type, errorThrown) {
+						
+						console.log("失败！")
+						//异常处理；
+						mui.toast('网络发生问题，请检查……')
+					},
+					success: function(data) {
+						console.log(JSON.stringify(data));
+					}
+				});
+				
+		    mui.ajax(url_line, {
+					data: {
+						stuNo: 's01',
+						password: '123456',
+					},
+					//headers: { 'Content-Type': 'application/json' },
+					//crossDomain:true,
+					dataType: 'jsonp', //服务器返回json格式数据
+					 jsonp: "jsoncallback",
+					type: 'post', //HTTP请求类型
+					async: false, //同步执行
+					timeout: 10000, //超时时间设置为10秒；
+					complete: function() {
+						mui(mui('#login')).button('reset');
+					},
+					beforeSend: function() {
+						mui(mui('#login')).button('loading');
+					},
+					error: function(xhr, type, errorThrown) {
+						
+						console.log("失败！")
+						//异常处理；
+						mui.toast('网络发生问题，请检查……')
+					},
+					success: function(data) {
+						console.log(JSON.stringify(data));
+					}
+				});
+            
+	</script>
+</html>

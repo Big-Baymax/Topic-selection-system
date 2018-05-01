@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html class="ui-page-login">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="icon" href="img/logo.png" type="image/x-icon" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/app.css" rel="stylesheet" />
+		<style>
+			.ui-page-login,
+			body {
+				width: 100%;
+				height: 100%;
+				margin: 0px;
+				padding: 0px;
+			}
+			
+			.mui-input-group .mui-input-row {
+				height: 50px;
+				padding-top: 5px;
+			}
+			
+			.login-img {
+				max-width: 50%;
+				border-radius: 100%
+			}
+			
+			.login-title {
+				font-size: 30px;
+				font-weight: 400;
+				padding-bottom: 20px;
+			}
+			
+			.mui-content {
+				height: 100%;
+				padding: 30px 20px;
+				background: white;
+			}
+			
+			.btn-con {
+				text-align: center;
+			}
+			
+			.link-area {
+				padding: 10px;
+				font-size: 15px;
+				text-decoration: underline;
+			}
+			
+			.login-btn {
+				width: 80%;
+				margin: 10px;
+				padding: 10px;
+				border-radius: 50px;
+				font-size: 20px;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<!--<header class="mui-bar mui-bar-nav header">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">登录</h1>
+		</header>-->
+		<header class="mui-bar mui-bar-nav header">
+			<a class="mui-action-back mui-icon mui-icon-back mui-pull-left"></a>
+			<h1 class="mui-title">修改密码</h1>
+		</header>
+		<div class="mui-content">
+			<form id='login-form' class="mui-input-group" style="background-color:transparent;">
+				<div class="mui-input-row">
+					<label>旧密码</label>
+					<input id="oldpwd" type="password" class="mui-input-password" placeholder="请输入旧密码" maxlength="30">
+				</div>
+				<div class="mui-input-row">
+					<label>新密码</label>
+					<input id="newpwd" type="password" class="mui-input-password" placeholder="请输入新密码" maxlength="30">
+				</div>
+				<div class="mui-input-row">
+					<label>确认密码</label>
+					<input id="qrpwd" type="password" class="mui-input-password" placeholder="请输入确认密码" maxlength="30">
+				</div>
+			</form>
+
+			<div class="mui-content-padded btn-con">
+				<button id='cpwd' data-loading-text="提交中" class="mui-btn login-btn mui-btn-lan">修改密码</button>
+			</div>
+			<div class="mui-content-padded oauth-area">
+
+			</div>
+		</div>
+		<script src="js/mui.js"></script>
+		<script type="text/javascript" src="js/app.js"></script>
+		<script>
+			(function($, doc) {
+				$.init();
+			});
+
+			var info = JSON.parse(localStorage.getItem("info"));
+
+			document.getElementById('cpwd').addEventListener('tap', function() {
+				if(!mui('#oldpwd')[0].value | !mui('#newpwd')[0].value | !mui('#qrpwd')[0].value) {
+					mui.toast('内容不能为空！');
+					return;
+				}
+
+				if(mui('#oldpwd')[0].value.length > 30 | mui('#newpwd')[0].value.length > 30 | mui('#qrpwd')[0].value.length > 30) {
+					mui.toast('内容过长！');
+					return;
+				}
+				mui.ajax(root + 'students/password', {
+					data: {
+						id: info.id,
+						old_pwd:mui('#oldpwd')[0].value,
+						new_pwd: mui('#newpwd')[0].value,
+					},
+					headers: {
+						'accessToken': token()
+					},
+					//crossDomain:true,
+					dataType: 'jsonp', //服务器返回json格式数据
+					type: 'post', //HTTP请求类型
+					//async: false, //同步执行
+					timeout: 10000, //超时时间设置为10秒；
+					complete: function() {
+						mui(mui('#cpwd')).button('reset');
+					},
+					beforeSend: function() {
+						mui(mui('#cpwd')).button('loading');
+					},
+					error: function(xhr, type, errorThrown) {
+						//异常处理；
+						try {
+							var response = JSON.parse(xhr.response);
+							mui.toast(response.message)
+						} catch(e) {
+							mui.toast('请检查网络是否通畅！');
+						}
+					},
+					success: function(data) {
+						localStorage.clear();
+						mui.toast('修改成功！');
+						setTimeout(function(){
+							openpage('login.html', {});
+						},1000);
+						
+					}
+				});
+			})
+		</script>
+	</body>
+
+</html>

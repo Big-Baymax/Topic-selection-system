@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html class="ui-page-login">
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link rel="icon" href="img/logo.png" type="image/x-icon" />
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/app.css" rel="stylesheet" />
+		<style>
+			.ui-page-login,
+			body {
+				width: 100%;
+				height: 100%;
+				margin: 0px;
+				padding: 0px;
+			}
+			
+			.mui-input-group .mui-input-row {
+				height: 50px;
+				padding-top: 5px;
+			}
+			
+			.login-img {
+				max-width: 50%;
+				border-radius: 100%
+			}
+			
+			.login-title {
+				font-size: 30px;
+				font-weight: 400;
+				padding-bottom: 20px;
+			}
+			
+			.mui-content {
+				height: 100%;
+				padding: 30px 20px;
+				background: white;
+			}
+			
+			.btn-con {
+				text-align: center;
+			}
+			
+			.link-area {
+				padding: 10px;
+				font-size: 15px;
+				text-decoration: underline;
+			}
+			
+			.login-btn {
+				width: 80%;
+				margin: 10px;
+				padding: 10px;
+				border-radius: 50px;
+				font-size: 20px;
+			}
+		</style>
+
+	</head>
+
+	<body>
+		<!--<header class="mui-bar mui-bar-nav header">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<h1 class="mui-title">登录</h1>
+		</header>-->
+		<div class="mui-content">
+			<div class="mui-row">
+				<div class="mui-col-xs-12" style="text-align: center;">
+					<img src="img/logo.jpg" class="login-img">
+					<h1 class="login-title">毕业设计选题管理系统</h1>
+					<h1 class="login-title">学生登录</h1>
+				</div>
+			</div>
+			<form id='login-form' class="mui-input-group" style="background-color:transparent;">
+				<div class="mui-input-row">
+					<label>用户名</label>
+					<input id='name' type="text" class="mui-input-clear mui-input" placeholder="请输入用户名" required="" maxlength="20">
+				</div>
+				<div class="mui-input-row">
+					<label>密码</label>
+					<input id="password" type="password" class="mui-input-password" placeholder="请输入密码" required="" maxlength="30">
+				</div>
+				<div class="mui-input-row">
+					<label>免登录</label>
+					<div class="mui-switch mui-active" id="nextlogin">
+						<div class="mui-switch-handle"></div>
+					</div>
+				</div>
+			</form>
+
+			<div class="mui-content-padded btn-con">
+				<button id='login' data-loading-text="登录中" class="mui-btn login-btn mui-btn-lan">登录</button>
+				<div class="link-area" id="no-login">
+					不能登录了怎么办？
+				</div>
+			</div>
+			<div class="mui-content-padded oauth-area">
+
+			</div>
+		</div>
+		<script src="js/mui.js"></script>
+		<script src="js/jquery-2.1.0.js"></script>
+		<script type="text/javascript" src="js/md5.js"></script>
+		<script src="js/app.js"></script>
+		<script>
+			(function($, doc) {
+				$.init({});
+
+				$.plusReady(function() {
+
+				}(mui, document));
+
+			});
+			document.getElementById('no-login').addEventListener('tap', function() {
+
+				mui.alert('赶紧联系辅导员，或者联系客服QQ：764929841', '不能登录怎么办？');
+			})
+			
+			if(localStorage.getItem("nextlogin")=="1") {
+				console.log("123");
+				mui.ajax(root + 'login', {
+					data: {
+						stuNo: localStorage.getItem("username"),
+						password: localStorage.getItem("pwd"),
+					},
+					dataType: 'json', //服务器返回json格式数据
+					type: 'post', //HTTP请求类型
+					async: false, //同步执行
+					timeout: 10000, //超时时间设置为10秒；
+					complete: function() {
+						mui(mui('#login')).button('reset');
+					},
+					beforeSend: function() {
+						mui(mui('#login')).button('loading');
+					},
+					error: function(xhr, type, errorThrown) {
+				
+						//异常处理；
+						try {
+							var response = JSON.parse(xhr.response);
+							mui.toast(response.message)
+						} catch(e) {
+							mui.toast('请检查网络是否通畅！');
+						}
+
+					},
+					success: function(data) {
+						localStorage.setItem("info", JSON.stringify(data.data.student));
+						localStorage.setItem("token", data.data.student.token); //设置  
+						mui.toast("正在自动登录……");
+						setTimeout(function() {
+							openpage('index.html', {});
+						}, 1000)
+
+					}
+				});
+			}
+
+			document.getElementById('login').addEventListener('tap', function() {
+		
+				if(!mui('#name')[0].value | !mui('#password')[0].value) {
+					mui.toast('用户名或者密码不能为空！');
+					return;
+				}
+
+				if(mui('#name')[0].value.length > 20 | mui('#password')[0].value.length > 30) {
+					mui.toast('用户名或者密码输入过长！');
+					return;
+				}
+
+				mui.ajax(root + 'login', {
+					data: {
+						stuNo: mui('#name')[0].value,
+						password: mui('#password')[0].value,
+					},
+					//headers: { 'Content-Type': 'application/json' },
+					//crossDomain:true,
+					dataType: 'json', //服务器返回json格式数据
+					type: 'post', //HTTP请求类型
+					async: false, //同步执行
+					timeout: 10000, //超时时间设置为10秒；
+					complete: function() {
+						mui(mui('#login')).button('reset');
+					},
+					beforeSend: function() {
+						mui(mui('#login')).button('loading');
+					},
+					error: function(xhr, type, errorThrown) {
+						console.log(JSON.stringify(xhr));
+						console.log(xhr);
+						//console.log(JSON.parse(xhr.response));
+						//异常处理；
+						try {
+							var response = JSON.parse(xhr.response);
+							mui.toast(response.message)
+						} catch(e) {
+							mui.toast('请检查网络是否通畅！');
+						}
+
+					},
+					success: function(data) {
+						//console.log(JSON.parse(data));
+						//data = JSON.parse(data)
+						//						localStorage.setItem("Name", "张三"); //设置  
+						//							console.log(localStorage.getItem("Name")); //获取  
+						//localStorage.clear();
+						//localStorage.removeItem(key);
+						//localStorage.setItem("info", data.data.student);
+						
+						//下次免登录
+						var isActive = document.getElementById("nextlogin").classList.contains("mui-active");
+						if(isActive) {
+							localStorage.setItem("nextlogin", 1);
+						} else {
+							localStorage.setItem("nextlogin", 0);
+						}
+						localStorage.setItem("username", mui('#name')[0].value);
+						localStorage.setItem("pwd", mui('#password')[0].value);
+
+						localStorage.setItem("info", JSON.stringify(data.data.student));
+						localStorage.setItem("token", data.data.student.token); //设置  
+					
+						mui.toast(data.message);
+						setTimeout(function() {
+							openpage('index.html', {});
+						}, 1000)
+
+					}
+				});
+			})
+		</script>
+	</body>
+
+</html>
