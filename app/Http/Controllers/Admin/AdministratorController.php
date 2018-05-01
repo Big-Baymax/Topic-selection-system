@@ -66,9 +66,9 @@ class AdministratorController extends BaseController
             return formatResponse($validateData);
         }
         $administrator = new Administrator();
-        $input = $request->post();
+        $input = clean($request->post());
         $administrator->name = $input['name'];
-        $administrator->mobile = $input['mobile'];
+        $administrator->mobile = $request->post('mobile');
         $administrator->login_name = $input['login_name'];
         $administrator->salt = makeSalt();
         $administrator->password = md5($input['password'] . md5($administrator->salt));
@@ -94,9 +94,9 @@ class AdministratorController extends BaseController
             return formatResponse($validateData);
         }
         $administrator = Administrator::findOrFail($id);
-        $input = $request->post();
+        $input = clean($request->post());
         $administrator->name = $input['name'];
-        $administrator->mobile = $input['mobile'];
+        $administrator->mobile = $request->post('mobile');
         $administrator->login_name = $input['login_name'];
         $administrator->save();
 

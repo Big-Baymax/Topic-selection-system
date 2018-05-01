@@ -58,7 +58,7 @@ class DepartmentController extends BaseController
             return formatResponse($validateData);
         }
         $department = new Department();
-        $input = $request->post();
+        $input = clean($request->post());
         $department->name = $input['name'];
         $department->save();
 
@@ -78,7 +78,7 @@ class DepartmentController extends BaseController
             return formatResponse($validateData);
         }
         $department = Department::findOrFail($id);
-        $input = $request->post();
+        $input = clean($request->post());
         $department->name = $input['name'];
         $department->save();
 

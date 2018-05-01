@@ -76,12 +76,12 @@ class StudentController extends BaseController
             return formatResponse($validateData);
         }
         $student = new Student();
-        $input = $request->post();
+        $input = clean($request->post());
         $student->stuNo = $input['stuNo'];
         $student->name = $input['name'];
-        $student->sex = $input['sex'];
+        $student->sex = $request->post('sex');
         $student->salt = makeSalt();
-        $student->department_id = $input['department_id'];
+        $student->department_id = $request->post('department_id');
         $student->password = md5(123456 . md5($student->salt));
         $student->save();
 
@@ -107,11 +107,11 @@ class StudentController extends BaseController
             return formatResponse($validateData);
         }
         $student = Student::findOrFail($id);
-        $input = $request->post();
+        $input = clean($request->post());
         $student->stuNo = $input['stuNo'];
         $student->name = $input['name'];
-        $student->sex = $input['sex'];
-        $student->department_id = $input['department_id'];
+        $student->sex = $request->post('sex');
+        $student->department_id = $request->post('department_id');
         $student->save();
 
         return formatResponse('操作成功～～', [], 1);

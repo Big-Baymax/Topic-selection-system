@@ -85,9 +85,9 @@ class TopicController extends BaseController
         }
         $teacher = $request->attributes->get('user');
         $topic = new Topic();
-        $input = $request->post();
+        $input = clean($request->post());
         $topic->name = $input['name'];
-        $topic->category_id = $input['category_id'];
+        $topic->category_id = $request->post('category_id');
         $topic->description = $input['description'];
         $topic->teacher_id = $teacher->id;
         $topic->department_id = $teacher->department_id;
@@ -118,9 +118,9 @@ class TopicController extends BaseController
         if ($topic->teacher_id != $user->id) {
             return formatResponse('只能修改自己的选题～～');
         }
-        $input = $request->post();
+        $input = clean($request->post());
         $topic->name = $input['name'];
-        $topic->category_id = $input['category_id'];
+        $topic->category_id = $request->post('category_id');
         $topic->description = $input['description'];
         $topic->save();
 

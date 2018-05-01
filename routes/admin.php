@@ -17,6 +17,7 @@ Route::post('/login', 'LoginController@login');
 Route::group(['middleware' => 'checkAdminLogin'], function () {
     Route::get('/home', 'WelcomeController@index');
     Route::get('/logout', 'LoginController@logout');
+    Route::view('/main', 'errors.index  ');
 //    管理员管理
     Route::get('/administrators/index', 'AdministratorController@list');
     Route::resource('/administrators', 'AdministratorController')->except(['create', 'edit', 'destroy']);

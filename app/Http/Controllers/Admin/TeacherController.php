@@ -67,7 +67,7 @@ class TeacherController extends BaseController
         ], [
             'teacherNo.required' => '请输入教师工号～～',
             'teacherNo.max' => '请输入符合规范的教师工号～～',
-            'teacherNo.unique' => '请输入符合规范的教师工号～～',
+            'teacherNo.unique' => '教师工号已存在～～',
             'name.*' => '请输入符合规范的姓名～～',
             'sex.required' => '请选择性别～～',
             'department_id.required' => '请选择系别～～'
@@ -76,11 +76,11 @@ class TeacherController extends BaseController
             return formatResponse($validateData);
         }
         $teacher = new Teacher();
-        $input = $request->post();
+        $input = clean($request->post());
         $teacher->teacherNo = $input['teacherNo'];
-        $teacher->sex = $input['sex'];
+        $teacher->sex = $request->post('sex');
         $teacher->name = $input['name'];
-        $teacher->department_id = $input['department_id'];
+        $teacher->department_id = $request->post('department_id');
         $teacher->salt = makeSalt();
         $teacher->password = md5(123456 . md5($teacher->salt));
         $teacher->save();
@@ -107,11 +107,11 @@ class TeacherController extends BaseController
             return formatResponse($validateData);
         }
         $teacher = Teacher::findOrFail($id);
-        $input = $request->post();
+        $input = clean($request->post());
         $teacher->teacherNo = $input['teacherNo'];
         $teacher->name = $input['name'];
-        $teacher->department_id = $input['department_id'];
-        $teacher->sex = $input['sex'];
+        $teacher->department_id = $request->post('department_id');
+        $teacher->sex = $request->post('sex');
         $teacher->save();
 
         return formatResponse('操作成功～～', [], 1);

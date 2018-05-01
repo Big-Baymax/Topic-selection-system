@@ -25,7 +25,9 @@ class TopicController extends Controller
         }
 
         $page_size = config('common.page_size');
-        $query->where('status', 1);
+        $student = $request->attributes->get('student');
+        $query->where('status', 1)
+            ->where('department_id', $student->department_id);
 
         $teacher_ids = array_unique($query->pluck('teacher_id')->toArray());
         $category_ids = array_unique($query->pluck('category_id')->toArray());
@@ -47,7 +49,6 @@ class TopicController extends Controller
 
         $topics = $query->get();
         $page['page_quantity'] = $topics->count();
-        $student = $request->attributes->get('student');
         $teachers = Teacher::where('department_id', $student->department_id)
             ->whereIn('id', $teacher_ids)
             ->select(['id', 'name'])

@@ -60,9 +60,9 @@ class TopicCategoryController extends BaseController
             return formatResponse($validateData);
         }
         $topic_category = new TopicCategory();
-        $input = $request->post();
+        $input = clean($request->post());
         $topic_category->name = $input['name'];
-        $topic_category->weight = $input['weight'];
+        $topic_category->weight = $request->post('weight');
         $topic_category->save();
 
         return formatResponse('操作成功～～', [], 1);
@@ -83,9 +83,9 @@ class TopicCategoryController extends BaseController
             return formatResponse($validateData);
         }
         $topic_category = TopicCategory::findOrFail($id);
-        $input = $request->post();
+        $input = clean($request->post());
         $topic_category->name = $input['name'];
-        $topic_category->weight = $input['weight'];
+        $topic_category->weight = $request->post('weight');
         $topic_category->save();
 
         return formatResponse('操作成功～～', [], 1);
