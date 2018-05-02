@@ -50,6 +50,11 @@ class StudentController extends BaseController
         foreach ($data as $key => $item) {
             $data[$key]['department'] = $item['department']['name'];
         }
+        foreach ($data as $key => $item) {
+            $data[$key] = array_map(function ($v) {
+                return htmlspecialchars($v);
+            }, $data[$key]);
+        }
         return [
             'total' => $total,
             'data' => $data,
@@ -76,7 +81,7 @@ class StudentController extends BaseController
             return formatResponse($validateData);
         }
         $student = new Student();
-        $input = clean($request->post());
+        $input = $request->post();
         $student->stuNo = $input['stuNo'];
         $student->name = $input['name'];
         $student->sex = $request->post('sex');
@@ -107,7 +112,7 @@ class StudentController extends BaseController
             return formatResponse($validateData);
         }
         $student = Student::findOrFail($id);
-        $input = clean($request->post());
+        $input = $request->post();
         $student->stuNo = $input['stuNo'];
         $student->name = $input['name'];
         $student->sex = $request->post('sex');

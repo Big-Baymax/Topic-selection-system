@@ -39,7 +39,14 @@ class AdministratorController extends BaseController
         $total = $query->where('is_admin', 0)->count();
         $data = $query->offset(($pageNumber - 1) * $pageSize)
                 ->take($pageSize)
-                ->get();
+                ->get()
+                ->toArray();
+        foreach ($data as $key => $item) {
+            $data[$key] = array_map(function ($v) {
+                return htmlspecialchars($v);
+            }, $data[$key]);
+        }
+
         return [
             'total' => $total,
             'data' => $data,
@@ -50,7 +57,7 @@ class AdministratorController extends BaseController
     public function store(Request $request)
     {
         $validateData = $this->validateMiddle($request->post(), [
-            'name' => 'required|max:255',
+            'name' => 'required|max:30',
             'mobile' => 'required|max:11|regex:/^1[34578][0-9]{9}$/',
             'login_name' => 'required|max:20|unique:administrators',
             'password' => 'required',
@@ -66,7 +73,7 @@ class AdministratorController extends BaseController
             return formatResponse($validateData);
         }
         $administrator = new Administrator();
-        $input = clean($request->post());
+        $input = $request->post();
         $administrator->name = $input['name'];
         $administrator->mobile = $request->post('mobile');
         $administrator->login_name = $input['login_name'];
@@ -80,7 +87,7 @@ class AdministratorController extends BaseController
     public function update(Request $request, $id)
     {
         $validateData = $this->validateMiddle($request->post(), [
-            'name' => 'required|max:255',
+            'name' => 'required|max:30',
             'mobile' => 'required|max:11|regex:/^1[34578][0-9]{9}$/',
             'login_name' => 'required|max:20|unique:administrators,login_name,' . $id,
         ], [
@@ -94,7 +101,7 @@ class AdministratorController extends BaseController
             return formatResponse($validateData);
         }
         $administrator = Administrator::findOrFail($id);
-        $input = clean($request->post());
+        $input = $request->post();
         $administrator->name = $input['name'];
         $administrator->mobile = $request->post('mobile');
         $administrator->login_name = $input['login_name'];

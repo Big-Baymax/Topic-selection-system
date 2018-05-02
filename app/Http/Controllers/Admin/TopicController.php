@@ -53,6 +53,11 @@ class TopicController extends BaseController
             $data[$key]['status'] = $topic_status_mapping[$item['status']];
             $data[$key]['current_teacher_id'] = $user->id;
         }
+        foreach ($data as $key => $item) {
+            $data[$key] = array_map(function ($v) {
+                return htmlspecialchars($v);
+            }, $data[$key]);
+        }
 
         return [
             'total' => $total,
@@ -85,7 +90,7 @@ class TopicController extends BaseController
         }
         $teacher = $request->attributes->get('user');
         $topic = new Topic();
-        $input = clean($request->post());
+        $input = $request->post();
         $topic->name = $input['name'];
         $topic->category_id = $request->post('category_id');
         $topic->description = $input['description'];
@@ -118,7 +123,7 @@ class TopicController extends BaseController
         if ($topic->teacher_id != $user->id) {
             return formatResponse('只能修改自己的选题～～');
         }
-        $input = clean($request->post());
+        $input = $request->post();
         $topic->name = $input['name'];
         $topic->category_id = $request->post('category_id');
         $topic->description = $input['description'];

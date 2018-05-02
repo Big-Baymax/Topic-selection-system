@@ -36,7 +36,13 @@ class DepartmentController extends BaseController
         $data = $query
             ->offset(($pageNumber - 1) * $pageSize)
             ->take($pageSize)
-            ->get();
+            ->get()
+            ->toArray();
+        foreach ($data as $key => $item) {
+            $data[$key] = array_map(function ($v) {
+                return htmlspecialchars($v);
+            }, $data[$key]);
+        }
 
         return [
             'total' => $total,
@@ -58,7 +64,7 @@ class DepartmentController extends BaseController
             return formatResponse($validateData);
         }
         $department = new Department();
-        $input = clean($request->post());
+        $input = $request->post();
         $department->name = $input['name'];
         $department->save();
 
@@ -78,7 +84,7 @@ class DepartmentController extends BaseController
             return formatResponse($validateData);
         }
         $department = Department::findOrFail($id);
-        $input = clean($request->post());
+        $input = $request->post();
         $department->name = $input['name'];
         $department->save();
 

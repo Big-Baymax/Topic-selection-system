@@ -49,6 +49,11 @@ class TeacherController extends BaseController
         foreach ($data as $key => $item) {
             $data[$key]['department'] = $item['department']['name'];
         }
+        foreach ($data as $key => $item) {
+            $data[$key] = array_map(function ($v) {
+                return htmlspecialchars($v);
+            }, $data[$key]);
+        }
 
         return [
             'total' => $total,
@@ -76,7 +81,7 @@ class TeacherController extends BaseController
             return formatResponse($validateData);
         }
         $teacher = new Teacher();
-        $input = clean($request->post());
+        $input = $request->post();
         $teacher->teacherNo = $input['teacherNo'];
         $teacher->sex = $request->post('sex');
         $teacher->name = $input['name'];
@@ -107,7 +112,7 @@ class TeacherController extends BaseController
             return formatResponse($validateData);
         }
         $teacher = Teacher::findOrFail($id);
-        $input = clean($request->post());
+        $input = $request->post();
         $teacher->teacherNo = $input['teacherNo'];
         $teacher->name = $input['name'];
         $teacher->department_id = $request->post('department_id');

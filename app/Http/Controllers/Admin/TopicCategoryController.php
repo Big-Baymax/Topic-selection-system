@@ -36,7 +36,13 @@ class TopicCategoryController extends BaseController
         $data = $query
             ->offset(($pageNumber - 1) * $pageSize)
             ->take($pageSize)
-            ->get();
+            ->get()
+            ->toArray();
+        foreach ($data as $key => $item) {
+            $data[$key] = array_map(function ($v) {
+                return htmlspecialchars($v);
+            }, $data[$key]);
+        }
 
         return [
             'total' => $total,
@@ -60,7 +66,7 @@ class TopicCategoryController extends BaseController
             return formatResponse($validateData);
         }
         $topic_category = new TopicCategory();
-        $input = clean($request->post());
+        $input = $request->post();
         $topic_category->name = $input['name'];
         $topic_category->weight = $request->post('weight');
         $topic_category->save();
@@ -83,7 +89,7 @@ class TopicCategoryController extends BaseController
             return formatResponse($validateData);
         }
         $topic_category = TopicCategory::findOrFail($id);
-        $input = clean($request->post());
+        $input = $request->post();
         $topic_category->name = $input['name'];
         $topic_category->weight = $request->post('weight');
         $topic_category->save();
