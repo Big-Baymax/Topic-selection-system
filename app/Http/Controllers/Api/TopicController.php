@@ -32,7 +32,7 @@ class TopicController extends Controller
         $teacher_ids = array_unique($query->pluck('teacher_id')->toArray());
         $category_ids = array_unique($query->pluck('category_id')->toArray());
         if (!empty($input['search_text'])) {
-            $query->where('name', $input['search_text']);
+            $query->where('name', 'liek', '%' . $input['search_text'] . '%');
         }
         if (!empty($input['teacher']) && is_array($input['teacher'])) {
             $query->whereIn('teacher_id', $input['teacher']);
