@@ -118,7 +118,7 @@
     }
 ```
 
-## 数据库配置（自动生成详细在database->migrations目录下）
+## 数据库配置（自动生成详细在database->migrations目录下查看）
 
 ### administrators 管理员用户表
 
@@ -131,25 +131,3 @@
 | password    | INTEGER | 登录密码  |
 | salt | string    | 加密盐  |
 | status   | tinyInteger   | 1 有效 0无效  |
-
-### plan_classroom  教室安排
-
-|     名称    |   类型   |     描述    |
-|:----------:|:-------:|:-----------:|
-| id         | INTEGER | 教室安排id    |
-| belong_id  | INTEGER | 入住单位id    |
-| room       | TEXT    | 使用教室/单选  |
-| start_time | TEXT    | 时间         |
-| end_time   | TEXT    | 时间         |
-| time_flag  | INTEGER | 上午/下午/晚上 |
-
-### plan_meeting 讨论室安排
-
-|     名称    |   类型   |     描述    |
-|:----------:|:-------:|:-----------:|
-| id         | INTEGER | 讨论室安排id   |
-| belong_id  | INTEGER | 入住单位id     |
-| content    | TEXT    | 使用讨论室/多选 |
-| start_time | TEXT    | 入住时间       |
-| end_time   | TEXT    | 入住时间       |
-| time_flag  | INTEGER | 上午/下午/晚上  |
