@@ -148,7 +148,9 @@
 
 ### 手机app
 ![App登录页面](https://raw.githubusercontent.com/Big-Baymax/Topic-selection-system/master/public/img/effect/login.jpg 'App登录页面' )
+<br>
 ![App主页](https://raw.githubusercontent.com/Big-Baymax/Topic-selection-system/master/public/img/effect/index.jpg 'App主页' )
+<br>
 ![App详情页](https://raw.githubusercontent.com/Big-Baymax/Topic-selection-system/master/public/img/effect/detail.jpg 'App详情页' )
 ### 系统后台
 
