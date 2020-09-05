@@ -145,7 +145,9 @@
 | status   | tinyInteger   | 1 有效 0无效  |
 
 ##最终效果
+
 ###手机app
 
 ###系统后台
-![后台登录页面](https://github.com/Big-Baymax/Topic-selection-system/raw/master/public/img/effect/admin_login.png '后台登录页面' )
+
+![后台登录页面](https://raw.githubusercontent.com/Big-Baymax/Topic-selection-system/master/public/img/effect/admin_login.png '后台登录页面' )
