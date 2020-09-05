@@ -147,6 +147,11 @@
 ## 最终效果
 
 ### 手机app
+
+<img src="https://raw.githubusercontent.com/Big-Baymax/Topic-selection-system/master/public/img/effect/login.jpg" title="App登录页面" width="300" /> 
+<img src="https://raw.githubusercontent.com/Big-Baymax/Topic-selection-system/master/public/img/effect/index.jpg" title="App主页" width="300" />
+<img src="https://raw.githubusercontent.com/Big-Baymax/Topic-selection-system/master/public/img/effect/detail.jpg" title="App详情页" width="300" />
+
 ![App登录页面](https://raw.githubusercontent.com/Big-Baymax/Topic-selection-system/master/public/img/effect/login.jpg 'App登录页面' )
 <br>
 ![App主页](https://raw.githubusercontent.com/Big-Baymax/Topic-selection-system/master/public/img/effect/index.jpg 'App主页' )
