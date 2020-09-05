@@ -147,7 +147,11 @@
 ## 最终效果
 
 ### 手机app
-
+![App登录页面](https://raw.githubusercontent.com/Big-Baymax/Topic-selection-system/master/public/img/effect/login.jpg 'App登录页面' )
+![App主页](https://raw.githubusercontent.com/Big-Baymax/Topic-selection-system/master/public/img/effect/index.jpg 'App主页' )
+![App详情页](https://raw.githubusercontent.com/Big-Baymax/Topic-selection-system/master/public/img/effect/detail.jpg 'App详情页' )
 ### 系统后台
 
 ![后台登录页面](https://raw.githubusercontent.com/Big-Baymax/Topic-selection-system/master/public/img/effect/admin_login.png '后台登录页面' )
+![管理员主页](https://raw.githubusercontent.com/Big-Baymax/Topic-selection-system/master/public/img/effect/admin.png '管理员主页' )
+![教师主页](https://raw.githubusercontent.com/Big-Baymax/Topic-selection-system/master/public/img/effect/teacher_index.png '教师主页' )
