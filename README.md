@@ -148,4 +148,4 @@
 ###手机app
 
 ###系统后台
-![后台登录页面](./public/img/effect/admin_login.png '后台登录页面' )
+![后台登录页面](https://github.com/Big-Baymax/Topic-selection-system/blob/master/public/img/effect/admin_login.png?raw=true '后台登录页面' )
