@@ -149,9 +149,8 @@
 ### 手机app
 
 <figure class="third">
-<img src="https://raw.githubusercontent.com/Big-Baymax/Topic-selection-system/master/public/img/effect/login.jpg" title="App登录页面" width="100" /> 
-<img src="https://raw.githubusercontent.com/Big-Baymax/Topic-selection-system/master/public/img/effect/index.jpg" title="App主页" width="100" />
-<img src="https://raw.githubusercontent.com/Big-Baymax/Topic-selection-system/master/public/img/effect/detail.jpg" title="App详情页" width="100" />
+<img src="https://raw.githubusercontent.com/Big-Baymax/Topic-selection-system/master/public/img/effect/login.jpg" title="App登录页面" width="300" /><img src="https://raw.githubusercontent.com/Big-Baymax/Topic-selection-system/master/public/img/effect/index.jpg" title="App主页" width="300" />
+<img src="https://raw.githubusercontent.com/Big-Baymax/Topic-selection-system/master/public/img/effect/detail.jpg" title="App详情页" width="300" />
 </figure>
 
 ### 系统后台
